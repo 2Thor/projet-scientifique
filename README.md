@@ -1,7 +1,10 @@
 # projet-scientifique
 Projet semestre 7 CPE Lyon; Gestion de feux.
 
-Dethoor Clément
-Chateauneuf Grégoire
-Bugand-Bugandet Jean-Sébastien
-Bruno Loïc
+Groupe 13 : .
+
+Bruno Loïc.
+Bugand-Bugandet Jean-Sébastien.
+Chateauneuf Grégoire.
+Dethoor Clément.
+
