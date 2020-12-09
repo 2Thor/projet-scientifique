@@ -42,6 +42,6 @@ Dethoor Clément</P>
 <p>Cette API a pour rôle de d'enregistrer et d'envoyer les données dans la base de données (PostGreSQL). Le Simulator's Web server, le Simulator, l'Emergency's web server et l'Emergency manager s'en servent pour leurs requêtes.</p>
 
 ## DATABASE
-<p>La base de donnée est divisée en 2 partie :<br>
+<p>La base de donnée est divisée en 2 parties :<br>
 - la partie Simulation (données provenant de Simulator)<br>
 - la partie réelle ( données récupérer via les Micro:Bit ainsi que les camions,casernes,etc)</p>
