@@ -1,6 +1,6 @@
 from Tkinter import *
 
-import serial
+from serial import *
 
 # Graphic interface for the send program
 master = Tk()
