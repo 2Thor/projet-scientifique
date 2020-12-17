@@ -4,8 +4,9 @@ let publicInt = 69      //entier partagé
 let DCprivateKey = 31   //clé privée DataCollect
 let DCpublicKey = publicInt * Math.exp(DCprivateKey)    //clé publique DataCollect
 let secretKey = 0       //clé secrête pour le chiffrement/déchiffrement des messages
+let radio = 99
 
-radio.setGroup(99)      //groupe radio
+radio.setGroup(radio)      //groupe radio
  
 //On envoi l’entier partagé et la clé publique du DataCollect jusqu’à ce qu’il ai la clé publique du sensor
 basic.forever(function () {
@@ -14,6 +15,13 @@ basic.forever(function () {
         radio.sendString(envoi)
     }
     else{
+        //Change le groupe radio pour toujours plus de sécurité
+        if(radio == 99) {
+            //Selectionne une radio entre 1 et 100
+            radio = Math.floor(Math.random() * 100) + 1;
+            let selRadio = "ChgmtRADIO" + radio
+            radio.sendString(secureMsg(selRadio, secretKey, "encode"))
+        }
         radio.sendString(secureMsg("coucou Sensor", secretKey, "encode"))
     }
 })

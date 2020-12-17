@@ -24,9 +24,16 @@ radio.onReceivedString(function (receivedString: string) {
         radio.sendValue("SensorKEY", SpublicKey)
     }
     else {
-        if(secureMsg(receivedString, secretKey, "decode") == "coucou Sensor") {
+        let message = secureMsg(receivedString, secretKey, "decode")
+        if(message == "coucou Sensor") {
             basic.showIcon(IconNames.Heart)
             radio.sendValue(secureMsg("coucou DataCollect", secretKey, "encode"))
+        }
+
+        //Changement de groupe de radio
+        message.split(";")
+        if(message[0] == "ChgmtRADIO") {
+            radio.setGroup(message[1])
         }
     }
 })
@@ -41,7 +48,7 @@ function secureMsg(str: string, key: number, mode: string): string {
         signe = 1
     }
     else{
-        sigrne = -1
+        signe = -1
     }
     
     let limit = 1000
