@@ -12,18 +12,14 @@ radio.onReceivedString(function (receivedString: string) {
     receiveData = decrypt(receivedString, key)
     let data = splitData(receiveData,";")
     if (dataVerification(data) == 1) {
-        sentUART(formJson(data))
+        //Envoi en UART
+        sentUART(serial.writeString(formJson(data)))
     }
     else {
         basic.showIcon(IconNames.No)
     }
 
 })
-
-//Envoi en UART
-function sentUART(str: string){
-    serial.writeString(str)
-}
 
 
 //Convertion en Json
