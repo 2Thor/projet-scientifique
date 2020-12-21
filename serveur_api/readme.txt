@@ -11,3 +11,7 @@ test --> nodemon
 En powershell administrateur :
 Get-ExecutionPolicy
 Set-ExecutionPolicy Unrestricted
+
+------------ Installation de l'ORM Sequelize -----------------
+
+npm install -g sequelize-cli
