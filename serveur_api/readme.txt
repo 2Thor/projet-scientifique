@@ -1,3 +1,5 @@
+WARNING : FAIRE TOUTE CES COMMANDES DANS LE DOSSIER DU SERVEUR
+
 Installer nodejs : https://nodejs.org/en/
 
 npm init
@@ -15,3 +17,7 @@ Set-ExecutionPolicy Unrestricted
 ------------ Installation de l'ORM Sequelize -----------------
 
 npm install -g sequelize-cli
+
+sequelize db:migrate
+
+https://medium.com/unetiq/using-multiple-databases-with-nodejs-and-sequelize-59e0abcbbe6f
