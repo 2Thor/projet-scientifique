@@ -21,3 +21,7 @@ npm install -g sequelize-cli
 sequelize db:migrate
 
 https://medium.com/unetiq/using-multiple-databases-with-nodejs-and-sequelize-59e0abcbbe6f
+
+npm install body-parser --save
+
+npm install bcrypt --save
