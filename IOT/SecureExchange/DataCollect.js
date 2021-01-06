@@ -7,45 +7,15 @@ let secretKey = 0       //clé secrête pour le chiffrement/déchiffrement des m
 let radio = 99
 
 radio.setGroup(radio)      //groupe radio
- 
-//On envoi l’entier partagé et la clé publique du DataCollect jusqu’à ce qu’il ai la clé publique du sensor
-basic.forever(function () {
-    if(SpublicKey == 0) {
-        let envoi = "INIT;" + publicInt + ";" + DCpublicKey
-        radio.sendString(envoi)
-    }
-    else{
-        //Change le groupe radio pour toujours plus de sécurité
-        if(radio == 99) {
-            //Selectionne une radio entre 1 et 100
-            radio = Math.floor(Math.random() * 100) + 1;
-            let selRadio = "ChgmtRADIO" + radio
-            radio.sendString(secureMsg(selRadio, secretKey, "encode"))
-        }
-        radio.sendString(secureMsg("coucou Sensor", secretKey, "encode"))
-    }
-})
 
-//Réception de la clé publique du sensor
-radio.onReceivedValue(function (name: string, value: number) {
-    if(name == "SensorKEY") {
-        SpublicKey = value
-	    secretKey = SpublicKey * Math.exp(DCprivateKey)
-    }
-})
-
-radio.onReceivedString(function (receivedString: string) {
-    if(secureMsg(receivedString, secretKey, "decode") == "coucou DataCollect") {
-        basic.showIcon(IconNames.Heart)
-    }
-})
-
-
+//Sécurisation des données
 function secureMsg(str: string, key: number, mode: string): string {
+    let stringEncrypted = "";
+
+    /*Cesar*//*
     let signe: number;
     let codeString: number;
     let cryptedleter: string;
-    let stringEncrypted = ""
 
     if (mode == "encode") {
         signe = 1
@@ -67,7 +37,95 @@ function secureMsg(str: string, key: number, mode: string): string {
             key = -codeString
         }
         
+    }*/
+
+    /*AES <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>*/
+    var CryptoJS = require("crypto-js");
+
+    if (mode == "encode") {
+        stringEncrypted = CryptoJS.AES.encrypt(str, key);
+    }
+    else{
+        stringEncrypted = CryptoJS.AES.decrypt(str, key);
     }
 
     return stringEncrypted
+}
+
+//On envoi l’entier partagé et la clé publique du DataCollect jusqu’à ce qu’il ai la clé publique du sensor
+basic.forever(function () {
+    if(SpublicKey == 0) {
+        let envoi = "INIT;" + publicInt + ";" + DCpublicKey
+        radio.sendString(envoi)
+    }
+    else{
+        //Change le groupe radio pour toujours plus de sécurité
+        if(radio == 99) {
+            //Selectionne une radio entre 1 et 100
+            radio = Math.floor(Math.random() * 100) + 1;
+            let selRadio = "ChgmtRADIO" + radio;
+
+            radio.sendString(secureMsg(selRadio, secretKey, "encode"));
+        }
+        radio.sendString(secureMsg("coucou Sensor", secretKey, "encode"));
+    }
+})
+
+//Réception de la clé publique du sensor
+radio.onReceivedValue(function (name: string, value: number) {
+    if(name == "SensorKEY") {
+        SpublicKey = value;
+	    secretKey = SpublicKey * Math.exp(DCprivateKey);
+    }
+})
+
+
+//  Fonctionnement continu
+
+//Fonction qui se déclenche quand elle reçoit une string par radio
+radio.onReceivedString(function (receivedString: string) {
+    receiveData = secureMsg(receivedString, key, "decode");
+    let data = splitData(receiveData,";");
+
+    if (dataVerification(data) == 1) {
+        //Envoi en UART
+        sentUART(serial.writeString(formJson(data)));
+    }
+    else {
+        basic.showIcon(IconNames.No)
+    }
+
+})
+
+
+//Convertion en Json
+function formJson(str: string[]): string{
+
+    str[1].replace("(", null)
+    str[1].replace(")", null)
+    let data = splitData(str[1], ",")
+    let sentJson = "{ "
+    sentJson += "x: " + "\"" + data[0] + "\"" + ","
+    sentJson += "y: " + "\"" + data[1] + "\"" + ","
+    sentJson += "i: " + "\"" + data[2] + "\""
+    sentJson += " }"
+    return sentJson
+
+}
+
+//Segmentation
+function splitData(str: string, separator: string): string[] {
+
+    let data = str.split(separator);
+    return data
+}
+
+//Verification
+function dataVerification(str: string[]): any {
+
+    let check = 1
+    if (str[0]!=idNeighbour) {
+        check = 0
+    }
+    return check
 }

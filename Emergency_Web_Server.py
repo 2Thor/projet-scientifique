@@ -78,6 +78,10 @@ def sendUARTMessage(msg):
 if __name__ == '__main__':
         initUART()
         print ('Press Ctrl-C to quit.')
+        import paho.mqtt.client as mqtt #import the client1
+        #broker_address="192.168.1.184" 
+        #client = mqtt.Client("emergency") #create new instance
+        #client.connect(broker_address) #connect to broker
 
         myclient = pymongo.MongoClient("mongodb://localhost:27017/")
         mydb = myclient["iot"]
@@ -106,6 +110,7 @@ if __name__ == '__main__':
                                         #print(json_data_str)
                                         try: #Insertion dans la BDD
                                                 mycol.insert_one(json_data_str)
+                                                #client.publish("repertoire","json_data_str")#publish
                                         except:
                                                 print("erreur d'insertion dans la base de donnée")  
                                         

@@ -1,6 +1,6 @@
 from Tkinter import *
 
-from serial import *
+from serial import *    #serial connexion to Micro:bit
 
 # Graphic interface for the send program
 master = Tk()
@@ -19,7 +19,7 @@ SERIALPORT = "/dev/tty.usbserial-DA00G4XZ"
 BAUDRATE = 115200
 ser = serial.Serial()
 
-def initUART():     
+def initUART():
         if serialButton['text'] == "Open Serial":   
                 # ser = serial.Serial(SERIALPORT, BAUDRATE)
                 ser.port=SERIALPORT
