@@ -51,7 +51,7 @@ function secureMsg(str: string, key: number, mode: string): string {
         signe = 1
     }
     else{
-        sigrne = -1
+        signe = -1
     }
     
     let limit = 1000
