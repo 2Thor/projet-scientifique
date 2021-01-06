@@ -1,75 +1,91 @@
-from Tkinter import *
+import time
+import socketserver
+import threading
+import serial
+import json
 
-from serial import *    #serial connexion to Micro:bit
 
-# Graphic interface for the send program
-master = Tk()
-scales=list()
-Nscales=60
-
-for i in range(Nscales):
-    w=Scale(master, from_=9, to=0) # creates widget
-    w.grid(row=i//10,column=i-(i//10)*10)
-    scales.append(w) # stores widget in scales list
-
-# send serial message 
-# Don't forget to establish the right serial port ******** ATTENTION
-# SERIALPORT = "/dev/ttyUSB0"
-SERIALPORT = "/dev/tty.usbserial-DA00G4XZ"
+HOST           = "0.0.0.0" #autorise tout le monde
+UDP_PORT       = 10000 #Port 10000salit
+MICRO_COMMANDS = ["TL" , "LT"]
+FILENAME        = "values.txt" #ecrire les valeurs reçu dans ce document
+LAST_VALUE      = "No Data" #si pas de data envoyer "no data"
+SERIALPORT = "/dev/ttyACM0"
 BAUDRATE = 115200
 ser = serial.Serial()
 
+
+class ThreadedUDPRequestHandler(socketserver.BaseRequestHandler):
+
+    def handle(self):
+        data = self.request[0].strip()
+        data = data.decode("utf-8") #decode le message recu en byte
+        socket = self.request[1]
+        current_thread = threading.current_thread()
+        print("{}: client: {}, wrote: {}".format(current_thread.name, self.client_address, data))
+        if data != "": #si on recoit une donnée
+                print("msg recu ",data)
+
+
+class ThreadedUDPServer(socketserver.ThreadingMixIn, socketserver.UDPServer):
+    pass
+
 def initUART():
-        if serialButton['text'] == "Open Serial":   
-                # ser = serial.Serial(SERIALPORT, BAUDRATE)
-                ser.port=SERIALPORT
-                ser.baudrate=BAUDRATE
-                ser.bytesize = serial.EIGHTBITS #number of bits per bytes
-                ser.parity = serial.PARITY_NONE #set parity check: no parity
-                ser.stopbits = serial.STOPBITS_ONE #number of stop bits
-                ser.timeout = None          #block read
+        # ser = serial.Serial(SERIALPORT, BAUDRATE)
+        ser.port=SERIALPORT
+        ser.baudrate=BAUDRATE
+        ser.bytesize = serial.EIGHTBITS #number of bits per bytes
+        ser.parity = serial.PARITY_NONE #set parity check: no parity
+        ser.stopbits = serial.STOPBITS_ONE #number of stop bits
+        ser.timeout = None          #block read
 
-                # ser.timeout = 0             #non-block read
-                # ser.timeout = 2              #timeout block read
-                ser.xonxoff = False     #disable software flow control
-                ser.rtscts = False     #disable hardware (RTS/CTS) flow control
-                ser.dsrdtr = False       #disable hardware (DSR/DTR) flow control
-                #ser.writeTimeout = 0     #timeout for write
-                print ("Starting Up Serial Monitor")
-                try:
-                        ser.open()
-                except serial.SerialException:
-                        print("Serial {} port not available".format(SERIALPORT))
-                        exit()
-                serialButton['text'] = "Close Serial"
-                b['state'] = 'normal'
-        else:
+        # ser.timeout = 0             #non-block read
+        # ser.timeout = 2              #timeout block read
+        ser.xonxoff = False     #disable software flow control
+        ser.rtscts = False     #disable hardware (RTS/CTS) flow control
+        ser.dsrdtr = False       #disable hardware (DSR/DTR) flow control
+        #ser.writeTimeout = 0     #timeout for write
+        print ("Starting Up Serial Monitor")
+        try:
+                ser.open()
+                while True:
+                        sendUARTMessage("(1,2,7)\n")
+                        time.sleep(5)
                 ser.close()
-                serialButton['text'] = "Open Serial"
-                b['state'] = 'disabled'
-
+        except serial.SerialException:
+                print("Serial {} port not available".format(SERIALPORT))
+                exit()
 
 def sendUARTMessage(msg):
     ser.write(msg.encode())
-    # print("Message <" + msg + "> sent to micro-controller." )
+    print("Message <" + msg + "> sent to micro-controller." )
 
 
-def read_scales():
-    b['state'] = 'disabled'
-    for i in range(Nscales):
-        column = i-(i//10)*10
-        row = i//10
-        if (scales[i].get()>0) :
-                print("Fire x=%d, y=%d has value %d" %( row, column, scales[i].get()) )
-        sendUARTMessage("(%d,%d,%d)" %(row, column, scales[i].get()))
-    
-    b['state'] = 'normal'
 
-b=Button(master,text="Send Values",highlightcolor="blue",command=read_scales, state="disabled") # button to read values
-serialButton=Button(master,text="Open Serial",highlightcolor="blue",command=initUART) # button to read values
-b.grid(row=6,column=7,columnspan = 3)
-serialButton.grid(row=6, column=0, columnspan = 3)
 
-# initUART()
 
-mainloop()
+# Main program logic follows:
+if __name__ == '__main__':
+        print ('Press Ctrl-C to quit.')
+        initUART()
+
+
+        server = ThreadedUDPServer((HOST, UDP_PORT), ThreadedUDPRequestHandler)
+
+        server_thread = threading.Thread(target=server.serve_forever)
+        server_thread.daemon = True
+
+        try:
+                server_thread.start()
+                print("Server started at {} port {}".format(HOST, UDP_PORT))
+                while True :
+                        pass
+
+                
+                                
+        except (KeyboardInterrupt, SystemExit):
+                server.shutdown()
+                server.server_close()
+                print ('Serv ferme')
+                exit()
+
