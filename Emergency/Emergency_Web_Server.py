@@ -1,20 +1,19 @@
 import time
-import argparse
-import signal
-import sys
-import socket
 import socketserver
 import threading
 import serial
-import pymongo
 import json
 
 
 HOST           = "0.0.0.0" #autorise tout le monde
-UDP_PORT       = 10000 #Port 10000
+UDP_PORT       = 10000 #Port 10000salit
 MICRO_COMMANDS = ["TL" , "LT"]
 FILENAME        = "values.txt" #ecrire les valeurs reçu dans ce document
 LAST_VALUE      = "No Data" #si pas de data envoyer "no data"
+SERIALPORT = "/dev/ttyACM0"
+BAUDRATE = 115200
+ser = serial.Serial()
+
 
 class ThreadedUDPRequestHandler(socketserver.BaseRequestHandler):
 
@@ -25,27 +24,13 @@ class ThreadedUDPRequestHandler(socketserver.BaseRequestHandler):
         current_thread = threading.current_thread()
         print("{}: client: {}, wrote: {}".format(current_thread.name, self.client_address, data))
         if data != "": #si on recoit une donnée
-                        if data in MICRO_COMMANDS: # Send message through UART
-                                sendUARTMessage(data)
-                                socket.sendto("True".encode(), self.client_address) #envoie du message true si tout c'est bien déroulé
-                        elif data == "getValues()": # Sent last value received from micro-controller
-                                socket.sendto(LAST_VALUE.encode(), self.client_address) 
-                                print("message {} envoyé".format(LAST_VALUE))
-                                # TODO: Create last_values_received as global variable      
-                        else:
-                                print("Unknown message: ",data)
+                print("msg recu ",data)
 
 
 class ThreadedUDPServer(socketserver.ThreadingMixIn, socketserver.UDPServer):
     pass
 
-
-# send serial message 
-SERIALPORT = "/dev/ttyACM0"
-BAUDRATE = 115200
-ser = serial.Serial()
-
-def initUART():        
+def initUART():
         # ser = serial.Serial(SERIALPORT, BAUDRATE)
         ser.port=SERIALPORT
         ser.baudrate=BAUDRATE
@@ -60,32 +45,27 @@ def initUART():
         ser.rtscts = False     #disable hardware (RTS/CTS) flow control
         ser.dsrdtr = False       #disable hardware (DSR/DTR) flow control
         #ser.writeTimeout = 0     #timeout for write
-        print ('Starting Up Serial Monitor')
+        print ("Starting Up Serial Monitor")
         try:
                 ser.open()
+                while True:
+                        print ("Je lis sur la liaison serie")
+                        time.sleep(5)
+                ser.close()
         except serial.SerialException:
                 print("Serial {} port not available".format(SERIALPORT))
                 exit()
 
 
 
-def sendUARTMessage(msg):
-    ser.write(msg.encode()) #ecrit un message dans le serial
-    print("Message <" + msg + "> sent to micro-controller." )
+
 
 
 # Main program logic follows:
 if __name__ == '__main__':
-        initUART()
         print ('Press Ctrl-C to quit.')
-        import paho.mqtt.client as mqtt #import the client1
-        #broker_address="192.168.1.184" 
-        #client = mqtt.Client("emergency") #create new instance
-        #client.connect(broker_address) #connect to broker
+        initUART()
 
-        myclient = pymongo.MongoClient("mongodb://localhost:27017/")
-        mydb = myclient["iot"]
-        mycol = mydb["data"]
 
         server = ThreadedUDPServer((HOST, UDP_PORT), ThreadedUDPRequestHandler)
 
@@ -95,32 +75,14 @@ if __name__ == '__main__':
         try:
                 server_thread.start()
                 print("Server started at {} port {}".format(HOST, UDP_PORT))
-                while ser.isOpen() : 
-                        time.sleep(1)
-                        if (ser.inWaiting() > 0): # if incoming bytes are waiting 
-                                #f= open(FILENAME,"a") #ouverture du fichier
-                                data_str = ser.read(ser.inWaiting()).decode("utf-8")
-                                #f.write(data_str) #ecriture dans le fichier
-                                print(data_str) #ecriture dans la console, permet de vérifier la donnée reçu
-                                #f.close() #fermeture du ficher 
-                                previousvalue = LAST_VALUE
-                                LAST_VALUE = data_str
-                                try: #Transformation de la donnée reçu en JSON
-                                        json_data_str = json.loads(data_str) 
-                                        #print(json_data_str)
-                                        try: #Insertion dans la BDD
-                                                mycol.insert_one(json_data_str)
-                                                #client.publish("repertoire","json_data_str")#publish
-                                        except:
-                                                print("erreur d'insertion dans la base de donnée")  
-                                        
-                                except:
-                                        LAST_VALUE = previousvalue #permet de ne pas accepter les données corrompues ou incomplète
-                                        print("erreur json")                     
+                while True :
+                        pass
+
+                
                                 
         except (KeyboardInterrupt, SystemExit):
                 server.shutdown()
                 server.server_close()
-                ser.close()
+                print ('Serv ferme')
                 exit()
 
