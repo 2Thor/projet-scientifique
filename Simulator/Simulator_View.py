@@ -1,4 +1,4 @@
-from flask import Flask #map on Web page
+from flask import Flask, render_template #map on Web page
 
 app = Flask(__name__)
 

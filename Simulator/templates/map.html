@@ -37,8 +37,7 @@
 
     for(var i = 1; i < 10; i++) {
         //map[i] = new fire([Math.floor(Math.random() * (45.8 - 45.6)) + 45.8, Math.floor(Math.random() * (4.9 - 4.7)) + 4.7], Math.random() * (100 - 20) + 20);
-        map[i] = new fire([Math.floor(Math.random() * (45.8 - 45.6)) + 45.8, Math.floor(Math.random() * (4.9 - 4.7)) + 4.7], Math.random() * (100 - 20) + 20);
-    
+        map[i] = new fire([Math.random() * (45.78 - 45.73) + 45.74, Math.random() * (4.94 - 4.80) + 4.80], Math.random()*100+50);
     }
     
     /*Add map tiles*/
@@ -53,7 +52,7 @@
     }).addTo(mymap);
     
     /*Add fire*/
-    for (var i = 0; i < 5; i++) {
+    for (var i = 0; i < map.length; i++) {
         var circle = L.circle(([map[i].location[0], map[i].location[1]]), {
             color: 'red',
             fillColor: '#f03',
