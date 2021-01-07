@@ -31,3 +31,7 @@ SEQUELIZE DATABABSE
 sequelize model:create --attributes "nom:string vitesse:integer efficacite:integer" --name vehicule
 sequelize model:create --attributes "nom:string vitesse:integer efficacite:integer" --name camion
 sequelize model:create --attributes "idType:integer idFeu:integer idCaserne:integer idPoint:integer" --name Camion_affecte
+sequelize model:create --attributes "intensite:integer idPoint:integer" --name feu_simule
+sequeliez model:create --attributes "latitude:integer longitude:integer idFeu:integer" --name coordonnee
+sequelize model:create --attribute "nom:string max_camion:integer" --name caserne
+sequelize model:create --attributes "intensite:integer idPoint:integer" --name feu_reel
