@@ -5,8 +5,8 @@ import serial, json, time
 #To do : Verifier integrite des donnees
 #A lancer en sudo, a besoin de pyserial pour fonctionner (sudo pip install pyserial)
 
+FILENAME = "uart.log"
 SERIALPORT = "/dev/ttyACM0"
-#SERIALPORT = "/dev/tty.usbserial-DA00G4XZ"
 BAUDRATE = 115200
 ser = serial.Serial()
 
@@ -31,15 +31,33 @@ def initUART():
         print("Serial {} port not available".format(SERIALPORT))
         exit()        
 
-initUART()
+# lecture de la liaison serie
+def readUARTMessage(): 
+    data_str = ser.read(ser.inWaiting()).decode("utf-8")
+    return data_str
 
-while ser.isOpen() : 
-    time.sleep(1)
-    if (ser.inWaiting() > 0): # if incoming bytes are waiting 
-        f= open("uart.log","a") #ouverture du fichier
-        data_str = ser.read(ser.inWaiting()).decode("utf-8")
-        f.write(data_str) #ecriture dans le fichier
-        print(data_str) #ecriture dans la console, permet de vérifier la donnée reçu
+# ecriture dans le fichier uart.log
+def writeFile(data_str):
+    f= open(FILENAME,"a") #ouverture du fichier
+    f.write(data_str) #ecriture dans le fichier
 
+# Main program logic follows:
+if __name__ == '__main__':
+    initUART()
+    print ('Press Ctrl-C to quit.')
+    try:
+        while ser.isOpen() : 
+            time.sleep(1)
+            if (ser.inWaiting() > 0): # if incoming bytes are waiting
+                datajson = readUARTMessage()
+                writeFile(datajson)
+                print(datajson) #ecriture dans la console, permet de vérifier la donnée reçu   
+
+    except (KeyboardInterrupt, SystemExit):
+        ser.close()
+        exit()
+
+
+ 
 
         
