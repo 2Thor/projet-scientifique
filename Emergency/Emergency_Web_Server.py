@@ -38,7 +38,7 @@ while ser.isOpen() :
     if (ser.inWaiting() > 0): # if incoming bytes are waiting 
         f= open("uart.log","a") #ouverture du fichier
         data_str = ser.read(ser.inWaiting()).decode("utf-8")
-        f.write(data_str + "\n") #ecriture dans le fichier
+        f.write(data_str) #ecriture dans le fichier
         print(data_str) #ecriture dans la console, permet de vérifier la donnée reçu
 
 
