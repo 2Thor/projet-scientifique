@@ -25,3 +25,9 @@ https://medium.com/unetiq/using-multiple-databases-with-nodejs-and-sequelize-59e
 npm install body-parser --save
 
 npm install bcrypt --save
+
+SEQUELIZE DATABABSE 
+
+sequelize model:create --attributes "nom:string vitesse:integer efficacite:integer" --name vehicule
+sequelize model:create --attributes "nom:string vitesse:integer efficacite:integer" --name camion
+sequelize model:create --attributes "idType:integer idFeu:integer idCaserne:integer idPoint:integer" --name Camion_affecte
