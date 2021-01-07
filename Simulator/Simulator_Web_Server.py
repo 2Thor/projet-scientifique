@@ -6,7 +6,7 @@ import json
 
 
 HOST           = "0.0.0.0" #autorise tout le monde
-UDP_PORT       = 10000 #Port 10000salit
+UDP_PORT       = 10000 #Port 10000
 MICRO_COMMANDS = ["TL" , "LT"]
 FILENAME        = "values.txt" #ecrire les valeurs reçu dans ce document
 LAST_VALUE      = "No Data" #si pas de data envoyer "no data"
@@ -48,10 +48,6 @@ def initUART():
         print ("Starting Up Serial Monitor")
         try:
                 ser.open()
-                while True:
-                        sendUARTMessage("(1,2,7)\n")
-                        time.sleep(5)
-                ser.close()
         except serial.SerialException:
                 print("Serial {} port not available".format(SERIALPORT))
                 exit()
@@ -79,13 +75,15 @@ if __name__ == '__main__':
                 server_thread.start()
                 print("Server started at {} port {}".format(HOST, UDP_PORT))
                 while True :
-                        pass
-
-                
+                        sendUARTMessage("(1,2,7)\n")
+                        time.sleep(5)
+      
                                 
         except (KeyboardInterrupt, SystemExit):
                 server.shutdown()
                 server.server_close()
-                print ('Serv ferme')
+                ser.close()
+                print ("Serv ferme \n")
+                print ("Liaison serie ferme \n")
                 exit()
 
