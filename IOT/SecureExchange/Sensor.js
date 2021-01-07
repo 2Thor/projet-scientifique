@@ -88,11 +88,9 @@ radio.onReceivedString(function (receivedString: string) {
 
 //Fonction déclenchée lors d'une réception de données par UART
 serial.onDataReceived(serial.delimiters(Delimiters.NewLine), function () {
-    //Attente de réception de données
-    serial.readUntil(serial.delimiters(Delimiters.NewLine));
 
     //Récupération des données
-    receiveData = serial.delimiters(Delimiters.NewLine);
+    receiveData = receiveData = serial.readUntil(serial.delimiters(Delimiters.NewLine));
 
     //Sécurisation des données
     sentData = encrypt(idMicrobit + ";" + receiveData, key);
