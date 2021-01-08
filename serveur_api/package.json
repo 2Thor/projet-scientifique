@@ -6,13 +6,13 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     
-    "sequelize:Real_data:migrate": "sequelize --options-path ./.sequelize-Real_data --env Real_data db:migrate",
-    "sequelize:Real_data:migrate:undo": "sequelize --options-path ./.sequelize-Real_data --env Real_data db:migrate:undo",
+    "sequelize:Real_data:migrate": "sequelize --options-path ./sequelize-Real_data --env Real_data db:migrate",
+    "sequelize:Real_data:migrate:undo": "sequelize --options-path ./sequelize-Real_data --env Real_data db:migrate:undo",
     "sequelize:Real_data:seed:all": "sequelize --options-path ./.sequelize-Real_data --env Real_data db:seed:all",
 
-    "sequelize:Simulate_data:migrate": "sequelize --options-path ./.sequelize-Simulate_data --env Simulate_data db:migrate",
-    "sequelize:Simulate_data:migrate:undo": "sequelize --options-path ./.sequelize-Simulate_data --env Simulate_data db:migrate:undo",
-    "sequelize:Simulate_data:seed:all": "sequelize --options-path ./.sequelize-Simulate_data --env Simulate_data db:seed:all"
+    "sequelize:Simulate_data:migrate": "sequelize --options-path ./sequelize-Simulate_data --env Simulate_data db:migrate",
+    "sequelize:Simulate_data:migrate:undo": "sequelize --options-path ./sequelize-Simulate_data --env Simulate_data db:migrate:undo",
+    "sequelize:Simulate_data:seed:all": "sequelize --options-path ./sequelize-Simulate_data --env Simulate_data db:seed:all"
 
   },
   "keywords": [

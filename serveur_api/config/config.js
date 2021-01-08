@@ -1,7 +1,7 @@
-{
+module.exports = {
   "development": {
     "databases": {
-      "Real_Data":{
+      "Real_data":{
         "username": "postgres",
         "password": "admin",
         "database": "Real_Data",
@@ -18,7 +18,7 @@
 
     }
   },
-  "Real_Data":{
+  "Real_data":{
     "username": "postgres",
     "password": "admin",
     "database": "Real_Data",
