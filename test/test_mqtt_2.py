@@ -10,7 +10,7 @@ eventlet.monkey_patch()
 app = Flask(__name__)
 #app.config['SECRET'] = 'my secret key'
 #app.config['TEMPLATES_AUTO_RELOAD'] = True
-app.config['MQTT_BROKER_URL'] = 'localhost'
+app.config['MQTT_BROKER_URL'] = '1.1.1.1'
 app.config['MQTT_BROKER_PORT'] = 1883
 #app.config['MQTT_USERNAME'] = ''
 #app.config['MQTT_PASSWORD'] = ''
@@ -22,7 +22,6 @@ mqtt = Mqtt(app)
 socketio = SocketIO(app)
 bootstrap = Bootstrap(app)
 
-
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -31,7 +30,7 @@ def index():
 @socketio.on('publish')
 def handle_publish(json_str):
     data = json.loads(json_str)
-    mqtt.publish(data['Emergency/test'], data['message'])
+    #mqtt.publish(data['Emergency/test'], data['message'])
 
 
 @socketio.on('subscribe')
@@ -58,6 +57,7 @@ def handle_mqtt_message(client, userdata, message):
 def handle_logging(client, userdata, level, buf):
     print(level, buf)
 
+mqtt.publish('Emergency/test', 'test qui va vite !!')
 
 if __name__ == '__main__':
     # important: Do not use reloader because this will create two Flask instances.
