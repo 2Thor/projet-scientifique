@@ -4,7 +4,16 @@
   "description": "Serveur HTTP pour api rest",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    
+    "sequelize:database1:migrate": "sequelize --options-path ./.sequelize-Real_data --env Real_data db:migrate",
+    "sequelize:database1:migrate:undo": "sequelize --options-path ./.sequelize-Real_data --env Real_data db:migrate:undo",
+    "sequelize:database1:seed:all": "sequelize --options-path ./.sequelize-Real_data --env Real_data db:seed:all",
+
+    "sequelize:database2:migrate": "sequelize --options-path ./.sequelize-Simulate_data --env Simulate_data db:migrate",
+    "sequelize:database2:migrate:undo": "sequelize --options-path ./.sequelize-Simulate_data --env Simulate_data db:migrate:undo",
+    "sequelize:database2:seed:all": "sequelize --options-path ./.sequelize-Simulate_data --env Simulate_data db:seed:all"
+
   },
   "keywords": [
     "server",
