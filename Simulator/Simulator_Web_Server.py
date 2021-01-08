@@ -3,6 +3,7 @@ import socketserver
 import threading
 import serial
 import json
+from flask import Flask, render_template #map on Web page
 
 
 HOST           = "0.0.0.0" #autorise tout le monde
@@ -57,14 +58,19 @@ def sendUARTMessage(msg):
     print("Message <" + msg + "> sent to micro-controller." )
 
 
+app = Flask(__name__)
 
-
+@app.route('/')
+def map_func():
+	return render_template('map.html')
 
 # Main program logic follows:
 if __name__ == '__main__':
         print ('Press Ctrl-C to quit.')
-        initUART()
 
+        app.run(debug = True)
+
+        initUART()
 
         server = ThreadedUDPServer((HOST, UDP_PORT), ThreadedUDPRequestHandler)
 

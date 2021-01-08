@@ -1,4 +1,5 @@
 import serial, json, time
+from flask import Flask, render_template #map on Web page
 
 #Ce script python lit les donnees recues sur ttyACM0 puis les ecrit dans un fichier
 #To do : Envoyer les donnees sur l'API Rest
@@ -41,9 +42,17 @@ def writeFile(data_str):
     f= open(FILENAME,"a") #ouverture du fichier
     f.write(data_str) #ecriture dans le fichier
 
+app = Flask(__name__)
+
+@app.route('/')
+def map_func():
+	return render_template('map.html')
+
 # Main program logic follows:
 if __name__ == '__main__':
     initUART()
+    app.run(debug = True)
+
     print ('Press Ctrl-C to quit.')
     try:
         while ser.isOpen() : 
