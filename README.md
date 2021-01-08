@@ -17,7 +17,7 @@ Dethoor Clément</P>
 ## Emergency's web server
 <p>Le rôle de ce serveur, en python avec flask, est de lire les données provenant du Data Collect via la liaison UART, au format JSON. Il a ensuite une triple fonction : <br>
  - Appel DATABSE API pour enregistrer dans la base de données réelle les valeurs et emplacements des intensités des feux reçus.<br>
- - Envoyer par messages MQTT les valeurs des instensités des feux au Dashboard dans le cloud.<br>
+ - Envoyer par messages MQTT les valeurs des instensités des feux au Dashboard dans le cloud. Broker : Mosquitto. Socket_io pour la connection bidirectionnelle avec peu de latence<br>
  - Permet l'Emergency's view</p>
 
 ## Dashboard
