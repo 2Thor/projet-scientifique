@@ -20,7 +20,6 @@ class ThreadedUDPRequestHandler(socketserver.BaseRequestHandler):
     def handle(self):
         data = self.request[0].strip()
         data = data.decode("utf-8") #decode le message recu en byte
-        socket = self.request[1]
         current_thread = threading.current_thread()
         print("{}: client: {}, wrote: {}".format(current_thread.name, self.client_address, data))
         if data != "": #si on recoit une donnée
