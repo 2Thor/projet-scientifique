@@ -3,6 +3,8 @@
 ## Mosquitto
 IP: 1.1.1.1
 Port: 1883
+uttilisateur: mqtt
+Mot de passe: n0t3sy
 
 ## Emergency
 IP: 1.1.1.20
@@ -15,8 +17,9 @@ Nom de la BDD: Gestion_Feu
 Utilisateur: mqtt
 MdP: N0tC0mpl1c4t3d
 
-
 ## Graphana
+Utilisateur: admin
+MdP: Gr4f4n4d0n3
 
 ## VM Ubuntu (Emergency)
 Utilisateur: equipe13

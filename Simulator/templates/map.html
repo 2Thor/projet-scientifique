@@ -15,6 +15,7 @@
    crossorigin=""></script>
 </head>
 <body>
+    <span id="test"></span>
     <!-- Map insertion -->
     <div id="map_id"></div>
 
@@ -86,6 +87,23 @@
             [trucks[i].location[0] + dim_truck_X, trucks[i].location[1] + dim_truck_Y],
             [trucks[i].location[0], trucks[i].location[1] + dim_truck_Y]
         ]).addTo(mymap);
+    }
+    setTimeout(myFunction, 3000);
+    function myFunction() {
+        removeLayer(mymap);
+        for(var i = 1; i < 10; i++) {
+            fires[i] = new fire([Math.random() * (45.78 - 45.73) + 45.74, Math.random() * (4.94 - 4.80) + 4.80], Math.random()*100+50);
+        }
+            
+            for (var i = 0; i < fires.length; i++) {
+            var circle = L.circle(([fires[i].location[0], fires[i].location[1]]), {
+                color: 'red',
+                fillColor: '#f03',
+                fillOpacity: 0.5,
+                radius: fires[i].intensity
+            }).addTo(mymap)
+        }
+        document.getElementById("test").innerHTML = "chgmt";
     }
     </script>
 </body>
