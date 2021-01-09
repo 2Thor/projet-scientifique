@@ -1,4 +1,4 @@
-module.exports = {
+module.exports =  {
   "development": {
     "databases": {
       "Real_data":{
@@ -15,8 +15,7 @@ module.exports = {
         "host": "127.0.0.1",
         "dialect": "postgres"
       }
-
-    }
+    },
   },
   "Real_data":{
     "username": "postgres",
