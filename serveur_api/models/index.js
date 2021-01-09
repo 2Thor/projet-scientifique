@@ -29,7 +29,7 @@ fs
         (file !== basename) &&
         (file.slice(-3) === '.js'))
     .forEach(file => {
-        const model = require(path.join(__dirname + '/Real_data', file))(db.Real_data, Sequelize.DataTypes);
+        const model = db.Database1.import(path.join(__dirname + '/Real_data', file));
         db[model.name] = model;
     });
 
@@ -42,7 +42,7 @@ fs
         (file !== basename) &&
         (file.slice(-3) === '.js'))
     .forEach(file => {
-      const model = require(path.join(__dirname + '/Simulate_data', file))(db.Simulate_data, Sequelize.DataTypes);
+        const model = db.Database2.import(path.join(__dirname + '/Simulate_data', file));
         db[model.name] = model;
     });
 
