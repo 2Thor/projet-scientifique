@@ -15,17 +15,17 @@ module.exports = (sequelize, DataTypes) => {
           allowNull: true
         }
       })
+      models.Vehicule.belongsTo(models.Feu_reel, {
+        foreignKey: {
+          allowNull: true
+        }
+      })
       models.Vehicule.belongsTo(models.Caserne, {
         foreignKey: {
           allowNull: true
         }
       })
-      models.Vehicule.belongsTo(models.Coordonne, {
-        foreignKey: {
-          allowNull: true
-        }
-      })
-      models.Vehicule.belongsTo(models.Feu_reel, {
+      models.Vehicule.belongsTo(models.Coordonnee, {
         foreignKey: {
           allowNull: true
         }

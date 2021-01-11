@@ -9,34 +9,30 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       idType: {
-        allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: 'Type_vehicule',
+          model: 'Type_vehicules',
           key: 'id'
         }
       },
       idFeu: {
-        allowNull: true,
         type: Sequelize.INTEGER,
         references: {
-          model: 'Feu_reel',
+          model: 'Feu_reels',
           key: 'id'
         }
       },
       idCaserne: {
-        allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: 'Caserne',
+          model: 'Casernes',
           key: 'id'
         }
       },
       idCoordonnee: {
-        allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: 'Coordonnee',
+          model: 'Coordonnees',
           key: 'id'
         }
       },

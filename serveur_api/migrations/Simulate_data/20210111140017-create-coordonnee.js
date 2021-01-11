@@ -1,24 +1,18 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Feu_simules', {
+    await queryInterface.createTable('Coordonnees', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      intensite: {
-        allowNull: false,
+      latitude: {
         type: Sequelize.INTEGER
       },
-      idCoordonnee: {
-        allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Coordonnee',
-          key: 'id'
-        }
+      longitude: {
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
@@ -31,6 +25,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Feu_simules');
+    await queryInterface.dropTable('Coordonnees');
   }
 };
