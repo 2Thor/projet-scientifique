@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('feu_simules', {
+    await queryInterface.createTable('Feu_reels', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -11,8 +11,12 @@ module.exports = {
       intensite: {
         type: Sequelize.INTEGER
       },
-      idPoint: {
-        type: Sequelize.INTEGER
+      idCoordonnee: {
+        type: Sequelize.INTEGER,
+          references: {
+          model: 'Coordonnees',
+          key: 'id'
+        }
       },
       createdAt: {
         allowNull: false,
@@ -25,6 +29,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('feu_simules');
+    await queryInterface.dropTable('Feu_reels');
   }
 };

@@ -3,22 +3,26 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class feu_simule extends Model {
+  class Feu_simule extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      models.Feu_reel.belongsTo(models.Coordonne, {
+        foreignKey: {
+          allowNull: true
+        }
+      })
     }
   };
-  feu_simule.init({
+  Feu_simule.init({
     intensite: DataTypes.INTEGER,
-    idPoint: DataTypes.INTEGER
+    idCoordonnee: DataTypes.INTEGER
   }, {
     sequelize,
-    modelName: 'feu_simule',
+    modelName: 'Feu_simule',
   });
-  return feu_simule;
+  return Feu_simule;
 };
