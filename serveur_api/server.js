@@ -14,7 +14,7 @@ server.use(bodyParser.json());
 //Configure routes
 server.get('/',function (req, res) {
     res.setHeader('Content-Type', 'text/html');
-    res.status(200).send('<h1>Bonjour sur mon serveur</h1>');
+    res.status(200).send('<h1>Bonjour le serveur de simulation d\'incendies</h1>');
 });
 
 server.use('/api/', apiRouter);
