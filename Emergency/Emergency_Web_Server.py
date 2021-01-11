@@ -1,5 +1,6 @@
 import serial, json, time
 from flask import Flask, render_template #map on Web page
+import paho.mqtt.client as mqtt
 
 #Ce script python lit les donnees recues sur ttyACM0 puis les ecrit dans un fichier
 #To do : Envoyer les donnees sur l'API Rest
@@ -47,11 +48,26 @@ app = Flask(__name__)
 @app.route('/')
 def map_func():
 	return render_template('map.html')
+    
+MQTT_ADDRESS = '1.1.1.1'
+MQTT_USER = 'mqtt'
+MQTT_PASSWORD = 'n0t3sy'
+MQTT_TOPIC = 'Emergency/test'
+MQTT_CLIENT_ID = 'MQTTInfluxDBBridge'
 
+def on_connect(client, userdata, flags, rc):
+    #Callback when receives a CONNACK response
+    print('Connected, returned code :' + str(rc))
+    client.subscribe(MQTT_TOPIC)
+    
 # Main program logic follows:
 if __name__ == '__main__':
     initUART()
-    app.run(debug = True)
+    
+    mqtt_client = mqtt.Client(MQTT_CLIENT_ID)
+    mqtt_client.username_pw_set(MQTT_USER, MQTT_PASSWORD)
+    mqtt_client.on_connect = on_connect
+    mqtt_client.connect(MQTT_ADDRESS, 1883)
 
     print ('Press Ctrl-C to quit.')
     try:
@@ -59,6 +75,10 @@ if __name__ == '__main__':
             time.sleep(1)
             if (ser.inWaiting() > 0): # if incoming bytes are waiting
                 datajson = readUARTMessage()
+                
+                print('Publishing...')
+                mqtt_client.publish(MQTT_TOPIC, datajson)
+
                 writeFile(datajson)
                 print(datajson) #ecriture dans la console, permet de vérifier la donnée reçu   
 
