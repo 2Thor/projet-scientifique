@@ -14,7 +14,7 @@ def on_connect(client, userdata, flags, rc):
 def on_publish(client,userdata,result): #create function for callback
     print("data published \n")
     pass
-    
+
 if __name__ == '__main__':
     print('MQTT Emergency to cloud')
 

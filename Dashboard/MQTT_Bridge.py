@@ -13,7 +13,6 @@ MQTT_ADDRESS = '1.1.1.1'
 MQTT_USER = 'mqtt'
 MQTT_PASSWORD = 'n0t3sy'
 MQTT_TOPIC = 'Emergency/test'
-MQTT_CLIENT_ID = 'MQTTInfluxDBBridge'
 
 influxdb_client = InfluxDBClient(INFLUXDB_ADDRESS, 8086, INFLUXDB_USER, INFLUXDB_PASSWORD, None)
 
@@ -41,10 +40,7 @@ def send_data_to_influxdb(fire_data):
     
 def on_message(client, userdata, msg):
     #Callback when PUBLISH message is received from the server
-    print(msg.topic + ' ' + str(msg.payload))
-    fire_data = str(msg.payload)
-    fire_data = fire_data[2:]
-    fire_data = fire_data[:-1]
+    fire_data = str(msg.payload.decode("utf-8"))
 
     print('données:', fire_data)
 
