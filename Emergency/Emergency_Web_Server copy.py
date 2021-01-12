@@ -1,10 +1,7 @@
 import paho.mqtt.client as mqtt
+from flask import Flask, render_template #map on Web page
 
-app = Flask(__name__)
 
-@app.route('/')
-def map_func():
-	return render_template('map.html')
     
 MQTT_ADDRESS = '1.1.1.1'
 MQTT_USER = 'mqtt'
@@ -19,6 +16,11 @@ def on_connect(client, userdata, flags, rc):
     
 # Main program logic follows:
 if __name__ == '__main__':
+    app = Flask(__name__)
+
+    @app.route('/')
+    def map_func():
+	    return render_template('map.html')
 
     mqtt_client = mqtt.Client(MQTT_CLIENT_ID)
     mqtt_client.username_pw_set(MQTT_USER, MQTT_PASSWORD)
