@@ -1,5 +1,4 @@
-import serial, json, time
-from flask import Flask, render_template #map on Web page
+import serial, time
 
 #Ce script python lit les donnees recues sur ttyACM0 puis les ecrit dans un fichier
 #To do : Envoyer les donnees sur l'API Rest
