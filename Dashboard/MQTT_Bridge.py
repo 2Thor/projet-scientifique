@@ -32,8 +32,7 @@ def send_data_to_influxdb(fire_data):
     json_body = [{
         "id": fire_data["id"],
         "location": fire_data["location"],
-        "intensity": fire_data["intensity"],
-        "date": fire_data["date"]
+        "intensity": fire_data["intensity"]
     }]
 
     print(influxdb_client.write_points(json_body))
@@ -53,7 +52,7 @@ def on_message(client, userdata, msg):
 def main():
     init_influxdb_database()
 
-    mqtt_client = mqtt.Client(MQTT_CLIENT_ID)
+    mqtt_client = mqtt.Client("mqtt")
     mqtt_client.username_pw_set(MQTT_USER, MQTT_PASSWORD)
     mqtt_client.on_connect = on_connect
     mqtt_client.on_message = on_message
