@@ -30,14 +30,14 @@ def init_influxdb_database():
 
 def send_data_to_influxdb(fire_data):
     fire_data = json.loads(fire_data)
-    json_body = {
-        'id': fire_data["id"],
-        'location': fire_data["location"],
-        'intensity': fire_data["intensity"],
-        'date': fire_data["date"]
-    }
+    json_body = [{
+        "id": fire_data["id"],
+        "location": fire_data["location"],
+        "intensity": fire_data["intensity"],
+        "date": fire_data["date"]
+    }]
 
-    influxdb_client.write_points(json_body)
+    print(influxdb_client.write_points(json_body))
     
 def on_message(client, userdata, msg):
     #Callback when PUBLISH message is received from the server
@@ -48,7 +48,7 @@ def on_message(client, userdata, msg):
 
     print('données:', fire_data)
 
-    fire_data = "{\"id\": 1, \"location\":[45.75231328094806, 4.8564025543870155], \"intensity\": 50, \"date\": 1113}"
+    #fire_data = "{\"id\": 1, \"location\":[45.75231328094806, 4.8564025543870155], \"intensity\": 50, \"date\": \"now\"}"
 
     if fire_data is not None:
         send_data_to_influxdb(fire_data)
