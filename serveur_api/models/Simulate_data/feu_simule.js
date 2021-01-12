@@ -10,11 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      models.Feu_reel.belongsTo(models.Coordonne, {
-        foreignKey: {
-          allowNull: true
-        }
-      })
+      // define association here
     }
   };
   Feu_simule.init({

@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       models.Feu_reel.hasMany(models.Vehicule);
-      models.Feu_reel.belongsTo(models.Coordonne, {
+      models.Feu_reel.belongsTo(models.Coordonnee, {
         foreignKey: {
           allowNull: true
         }

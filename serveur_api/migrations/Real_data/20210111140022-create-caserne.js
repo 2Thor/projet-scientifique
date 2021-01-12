@@ -9,13 +9,16 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       nom: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       max_camion: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       idCoordonnee: {
         type: Sequelize.INTEGER,
+        allowNull: true,
         references: {
           model: 'Coordonnees',
           key: 'id'

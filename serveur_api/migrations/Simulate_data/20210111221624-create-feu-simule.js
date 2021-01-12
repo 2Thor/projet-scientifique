@@ -12,11 +12,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       idCoordonnee: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Coordonnees',
-          key: 'id'
-        }
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,

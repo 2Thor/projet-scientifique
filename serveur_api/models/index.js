@@ -17,26 +17,26 @@ for(let i = 0; i < databases.length; ++i) {
 /**Add the Database Models**/
 //Add models from database1 folder
 fs
-    .readdirSync(__dirname + '/Real_data')
-    .filter(file =>
-        (file.indexOf('.') !== 0) &&
-        (file !== basename) &&
-        (file.slice(-3) === '.js'))
-    .forEach(file => {
-        const model = db.Database2.import(path.join(__dirname + '/Real_data', file));
-        db[model.name] = model;
-    });
-
-
-// Add models from database2 folder
-fs
     .readdirSync(__dirname + '/Simulate_data')
     .filter(file =>
         (file.indexOf('.') !== 0) &&
         (file !== basename) &&
         (file.slice(-3) === '.js'))
     .forEach(file => {
-        const model = db.Database2.import(path.join(__dirname + '/Simulate_data', file));
+        const model = require(path.join(__dirname + '/Simulate_data', file))(db.Simulate_data, Sequelize.DataTypes);
+        db[model.name] = model;
+    });
+
+
+// Add models from database2 folder
+fs
+    .readdirSync(__dirname + '/Real_data')
+    .filter(file =>
+        (file.indexOf('.') !== 0) &&
+        (file !== basename) &&
+        (file.slice(-3) === '.js'))
+    .forEach(file => {
+        const model = require(path.join(__dirname + '/Real_data', file))(db.Real_data, Sequelize.DataTypes);
         db[model.name] = model;
     });
 
@@ -45,6 +45,5 @@ Object.keys(db).forEach(modelName => {
         db[modelName].associate(db);
     }
 });
-
 
 module.exports = db;

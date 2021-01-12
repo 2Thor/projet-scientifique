@@ -37,3 +37,4 @@ sequelize model:create --attributes "intensite:integer idCoordonnee:integer" --n
 sequelize model:create --attributes "intensite:integer idCoordonnee:integer" --name Feu_reel
 sequelize model:create --attributes "nom:string vitesse:integer efficacite:integer" --name Type_vehicule
 sequelize model:create --attributes "idType:integer idFeu:integer idCaserne:integer idCoordonnee:integer" --name Vehicule
+( sequelize model:create --attributes "idCoord:allowNull:autoIncrement:primaryKey:INTEGER latitude:integer longitude:integer" --name CoordonneeTest ) 
