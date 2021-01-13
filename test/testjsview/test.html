@@ -9,7 +9,7 @@
 
 <script>
 var xhr = new XMLHttpRequest(); 
-xhr.open('GET', 'https://jsonplaceholder.typicode.com/users/1');
+xhr.open('GET', 'http://127.0.0.1:8080/api/real_data/feu');
 xhr.onreadystatechange = function() {
   if (xhr.readyState === 4) {
     var reponse = JSON.parse(xhr.responseText);
