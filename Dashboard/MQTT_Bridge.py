@@ -1,7 +1,7 @@
 from json import encoder
 from json.decoder import JSONDecoder
 import paho.mqtt.client as mqtt
-from influxdb import InfluxDBClient
+from influxdb import InfluxDBClient, client
 import json
 
 INFLUXDB_ADDRESS = 'localhost'
@@ -25,14 +25,22 @@ def init_influxdb_database():
     databases = influxdb_client.get_list_database()
     if len(list(filter(lambda x: x['name'] == INFLUXDB_DATABASE, databases))) == 0:
         influxdb_client.create_database(INFLUXDB_DATABASE)
+
+    print(influxdb_client.get_list_database())
     influxdb_client.switch_database(INFLUXDB_DATABASE)
 
 def send_data_to_influxdb(fire_data):
     fire_data = json.loads(fire_data)
+
     json_body = [{
-        "id": fire_data["id"],
-        "location": fire_data["location"],
-        "intensity": fire_data["intensity"]
+        "measurement": "capteurs",
+        "tags": {
+            "lat": fire_data["x"],
+            "lon": fire_data["y"]
+        },
+        "fields": {
+            "intensity": fire_data["i"]
+        }
     }]
 
     print(influxdb_client.write_points(json_body))
@@ -42,8 +50,6 @@ def on_message(client, userdata, msg):
     fire_data = str(msg.payload.decode("utf-8"))
 
     print('données:', fire_data)
-
-    #fire_data = "{\"id\": 1, \"location\":[45.75231328094806, 4.8564025543870155], \"intensity\": 50, \"date\": \"now\"}"
 
     if fire_data is not None:
         send_data_to_influxdb(fire_data)
