@@ -9,7 +9,7 @@ INFLUXDB_USER = 'mqtt'
 INFLUXDB_PASSWORD = 'N0tC0mpl1c4t3d'
 INFLUXDB_DATABASE = 'test' #'Gestion_Feu'
 
-MQTT_ADDRESS = '1.1.1.1'
+MQTT_ADDRESS = 'localhost'
 MQTT_USER = 'mqtt'
 MQTT_PASSWORD = 'n0t3sy'
 MQTT_TOPIC = 'Emergency/test'

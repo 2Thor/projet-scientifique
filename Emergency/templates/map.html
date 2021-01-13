@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="refresh" content="4">
 
     <!-- Leaflet  CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
@@ -39,14 +40,33 @@
         }
     }
 
-    var json = "{\"x\": 45.75231328094806, \"y\": 4.8564025543870155, \"i\": 50}"
+    function aff(fires, trucks) {
+        /*Show fire*/
+        for (var i = 0; i < fires.length; i++) {
+            var circle = L.circle(([fires[i].location[0], fires[i].location[1]]), {
+                color: 'red',
+                fillColor: '#f03',
+                fillOpacity: 0.5,
+                radius: fires[i].intensity
+            }).addTo(mymap)
+        }
+
+        /*Show trucks*/
+        for (var i = 0; i < trucks.length; i++) {
+            var square = L.polygon([
+                [trucks[i].location[0], trucks[i].location[1]],
+                [trucks[i].location[0] + dim_truck_X, trucks[i].location[1]],
+                [trucks[i].location[0] + dim_truck_X, trucks[i].location[1] + dim_truck_Y],
+                [trucks[i].location[0], trucks[i].location[1] + dim_truck_Y]
+            ]).addTo(mymap);
+        }
+    }
 
     var fires = [];
     var trucks = [];
 
     var dim_truck_X = 0.002;
     var dim_truck_Y = 0.001;
-
 
     //Initialize fires
     fires[0] = new fire([45.75231328094806, 4.8564025543870155], 50);
@@ -59,6 +79,8 @@
     for(var i = 0; i < 10; i++) {
         trucks[i] = new truck([Math.random() * (45.78 - 45.73) + 45.74, Math.random() * (4.94 - 4.80) + 4.80]);
     }
+
+    var json = "{\"x\": 45.75231328094806, \"y\": 4.8564025543870155, \"i\": 50}"
     
     /*Add map tiles*/
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
@@ -70,43 +92,9 @@
         /*Account Mapbox*/
         accessToken: 'pk.eyJ1IjoibG9pY2JydW5vIiwiYSI6ImNramw3OG1mMzM5M3QydXNjeDJ1NXM1enAifQ.2edbMGFjSdeR75h8zAPfJw'
     }).addTo(mymap);
-    
-    /*Show fire*/
-    for (var i = 0; i < fires.length; i++) {
-        var circle = L.circle(([fires[i].location[0], fires[i].location[1]]), {
-            color: 'red',
-            fillColor: '#f03',
-            fillOpacity: 0.5,
-            radius: fires[i].intensity
-        }).addTo(mymap)
-    }
 
-    /*Show trucks*/
-    for (var i = 0; i < trucks.length; i++) {
-        var square = L.polygon([
-            [trucks[i].location[0], trucks[i].location[1]],
-            [trucks[i].location[0] + dim_truck_X, trucks[i].location[1]],
-            [trucks[i].location[0] + dim_truck_X, trucks[i].location[1] + dim_truck_Y],
-            [trucks[i].location[0], trucks[i].location[1] + dim_truck_Y]
-        ]).addTo(mymap);
-    }
-    setTimeout(myFunction, 3000);
-    function myFunction() {
-        removeLayer(mymap);
-        for(var i = 1; i < 10; i++) {
-            fires[i] = new fire([Math.random() * (45.78 - 45.73) + 45.74, Math.random() * (4.94 - 4.80) + 4.80], Math.random()*100+50);
-        }
-            
-            for (var i = 0; i < fires.length; i++) {
-            var circle = L.circle(([fires[i].location[0], fires[i].location[1]]), {
-                color: 'red',
-                fillColor: '#f03',
-                fillOpacity: 0.5,
-                radius: fires[i].intensity
-            }).addTo(mymap)
-        }
-        document.getElementById("test").innerHTML = "chgmt";
-    }
+    aff(fires, trucks);
+
     </script>
 </body>
 </html>
