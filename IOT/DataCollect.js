@@ -13,7 +13,7 @@ radio.onReceivedString(function (receivedString: string) {
     let data = splitData(receiveData,";")
     if (dataVerification(data) == 1) {
         //Envoi en UART
-        sentUART(serial.writeString(formJson(data)))
+        serial.writeString(formJson(data))
     }
     else {
         basic.showIcon(IconNames.No)
@@ -29,9 +29,9 @@ function formJson(str: string[]): string{
     str[1].replace(")", null)
     let data = splitData(str[1], ",")
     let sentJson = "{ "
-    sentJson += "x: " + "\"" + data[0] + "\"" + ","
-    sentJson += "y: " + "\"" + data[1] + "\"" + ","
-    sentJson += "i: " + "\"" + data[2] + "\""
+    sentJson += "'x': " + "\'" + data[0] + "\'" + ","
+    sentJson += "'y': " + "\'" + data[1] + "\'" + ","
+    sentJson += "'i': " + "\'" + data[2] + "\'"
     sentJson += " }"
     return sentJson
 
