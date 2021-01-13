@@ -1,11 +1,21 @@
 import serial, time, json
 import requests as rq
+import paho.mqtt.client as mqtt
 
 #Ce script python lit les donnees recues sur ttyACM0 puis les ecrit dans un fichier
 #Fait : Envoyer les donnees sur l'API Rest
 #Fait : Verifier integrite des donnees
 #A lancer en sudo, a besoin de pyserial pour fonctionner (sudo pip install pyserial)
 
+#MQTT
+MQTT_ADDRESS = '192.168.1.89'
+MQTT_PORT = 1883
+MQTT_USER = 'mqtt'
+MQTT_PASSWORD = 'n0t3sy'
+MQTT_TOPIC = 'Emergency/test'
+MQTT_CLIENT_ID = "Emergency1"
+
+#UART
 FILENAME = "uart.log"
 SERIALPORT = "/dev/ttyACM0"
 BAUDRATE = 115200
@@ -42,6 +52,15 @@ def writeFile(data_str):
     f= open(FILENAME,"a") #ouverture du fichier
     f.write(data_str) #ecriture dans le fichier
 
+def on_connect(client, userdata, flags, rc):
+    #Callback when receives a CONNACK response
+    print('Connected, returned code :' + str(rc))
+    client.subscribe(MQTT_TOPIC)
+
+def on_publish(client,userdata,result): #create function for callback
+    print("data published \n")
+    pass
+
 # requete post
 def sendPost(data_json):
     datajson = json.loads(data_json) #string to dict
@@ -52,6 +71,12 @@ def sendPost(data_json):
 if __name__ == '__main__':
     initUART()
 
+    #init mqtt
+    mqtt_client = mqtt.Client(MQTT_CLIENT_ID) #create client object
+    mqtt_client.username_pw_set(MQTT_USER, MQTT_PASSWORD)
+    mqtt_client.on_publish = on_publish #assign function to callback
+    mqtt_client.connect(MQTT_ADDRESS, MQTT_PORT) #establish connection
+
     print ('Press Ctrl-C to quit.')
     try:
         while ser.isOpen() : 
@@ -59,6 +84,14 @@ if __name__ == '__main__':
             if (ser.inWaiting() > 0): # if incoming bytes are waiting
                 data = readUARTMessage() # read l'uart
                 print("Donnees recues du DataCollect : " + data)
+
+                #Envoi des données au MQTT
+                try:
+                    mqtt_client.publish(MQTT_TOPIC,data) #publish
+                except:
+                    print("Erreur d'envoi MQTT") 
+
+                #Envoi des données a la BDD
                 try:
                     sendPost(data) # requete post
                 except:
