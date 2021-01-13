@@ -11,8 +11,11 @@ exports.router = (function() {
     //apiRouter.route('/users/register/').post(usersCtrl.register);
     //apiRouter.route('/users/login/').post(usersCtrl.login);
 
-    //Routes
-    apiRouter.route('/feu').post(real_dataCtrl.create_feu);
+    //Routes real_data
+    apiRouter.route('/real_data/feu').post(real_dataCtrl.create_feu);
+
+    //Routes real_data
+    apiRouter.route('/simul_data/feu').post(simulate_dataCtrl.create_feu);
 
     return apiRouter;
 })();
