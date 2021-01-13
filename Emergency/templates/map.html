@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="refresh" content="20">
+
+    <!-- Leaflet  CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin=""/>
+
+    <!-- Leaflet  JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+   integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+   crossorigin=""></script>
+</head>
+<body>
+    <span id="test"></span>
+    <!-- Map insertion -->
+    <div id="map_id"></div>
+
+    <!-- Map dimention -->
+    <style>#map_id { height: 100vh; width: 100vw; }</style>
+
+    <!-- Map description -->
+   <script>
+    /*requete GET*/
+    var xhr = new XMLHttpRequest(); 
+    xhr.open('GET', 'http://localhost:8080/api/real_data/get_feu');
+    xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4) {
+        console.log(xhr.responseText)
+        var reponse = JSON.parse(xhr.responseText);
+        console.log(reponse)
+        alert(reponse);
+    }
+    };
+    xhr.send();
+   
+   
+   /*Create the map*/
+    var mymap = L.map('map_id').setView([45.7670562,4.8705643], 14);
+    
+    class fire {
+        constructor(location, intensity) {
+            this.location = location;
+            this.intensity = intensity;
+        }
+    }
+
+    class truck {
+        constructor(location) {
+            this.location = location;
+        }
+    }
+
+    function aff(fires, trucks) {
+        /*Show fire*/
+        for (var i = 0; i < fires.length; i++) {
+            var circle = L.circle(([fires[i].location[0], fires[i].location[1]]), {
+                color: 'red',
+                fillColor: '#f03',
+                fillOpacity: 0.5,
+                radius: fires[i].intensity
+            }).addTo(mymap)
+        }
+
+        /*Show trucks*/
+        for (var i = 0; i < trucks.length; i++) {
+            var square = L.polygon([
+                [trucks[i].location[0], trucks[i].location[1]],
+                [trucks[i].location[0] + dim_truck_X, trucks[i].location[1]],
+                [trucks[i].location[0] + dim_truck_X, trucks[i].location[1] + dim_truck_Y],
+                [trucks[i].location[0], trucks[i].location[1] + dim_truck_Y]
+            ]).addTo(mymap);
+        }
+    }
+
+    var fires = [];
+    var trucks = [];
+
+    var dim_truck_X = 0.002;
+    var dim_truck_Y = 0.001;
+
+    //Initialize fires
+    fires[0] = new fire([45.75231328094806, 4.8564025543870155], 50);
+
+    for(var i = 1; i < 10; i++) {
+        fires[i] = new fire([Math.random() * (45.78 - 45.73) + 45.74, Math.random() * (4.94 - 4.80) + 4.80], Math.random()*100+50);
+    }
+
+    //Initialize trucks
+    for(var i = 0; i < 10; i++) {
+        trucks[i] = new truck([Math.random() * (45.78 - 45.73) + 45.74, Math.random() * (4.94 - 4.80) + 4.80]);
+    }
+
+    var json = "{\"x\": 45.75231328094806, \"y\": 4.8564025543870155, \"i\": 50}"
+    
+    /*Add map tiles*/
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1,
+        /*Account Mapbox*/
+        accessToken: 'pk.eyJ1IjoibG9pY2JydW5vIiwiYSI6ImNramw3OG1mMzM5M3QydXNjeDJ1NXM1enAifQ.2edbMGFjSdeR75h8zAPfJw'
+    }).addTo(mymap);
+
+    aff(fires, trucks);
+
+    </script>
+</body>
+</html>
