@@ -37,12 +37,7 @@ module.exports = {
     },
 
     get_feu: function(req, res) {
-        /*models.Simulate_data.models.Feu_simule.findOne({
-            attributes: ['intensite'],
-            where: {intensite: '27'}
-        })
-        .then(function())*/
-
+    
         var id = req.params.id;
         var test = models.Simulate_data.models.Feu_simule.findAll({
             where: {
@@ -51,7 +46,7 @@ module.exports = {
           })
         .then(function(test){
             return res.status(201).json({
-                'Réponse': test[0]
+                'result':test[0]
             })
         })
     },

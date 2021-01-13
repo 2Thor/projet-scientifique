@@ -34,12 +34,12 @@ module.exports = {
             return res.status(500).json({ 'Erreur insertion coordonne' : err });
           });
     },
-    
+
     get_feu: function(req, res) {
         var test = models.Simulate_data.models.Feu_simule.findAll()
         .then(function(test){
             return res.status(201).json({
-                'Result': test[0]
+                'result': test[0]
             })
         })
     },
