@@ -1,8 +1,9 @@
-import serial, time
+import serial, time, json
+import requests as rq
 
 #Ce script python lit les donnees recues sur ttyACM0 puis les ecrit dans un fichier
-#To do : Envoyer les donnees sur l'API Rest
-#To do : Verifier integrite des donnees
+#Fait : Envoyer les donnees sur l'API Rest
+#Fait : Verifier integrite des donnees
 #A lancer en sudo, a besoin de pyserial pour fonctionner (sudo pip install pyserial)
 
 FILENAME = "uart.log"
@@ -40,6 +41,12 @@ def readUARTMessage():
 def writeFile(data_str):
     f= open(FILENAME,"a") #ouverture du fichier
     f.write(data_str) #ecriture dans le fichier
+
+# requete post
+def sendPost(data_json):
+    datajson = json.loads(data_json) #string to dict
+    r = rq.post("http://127.0.0.1:8080/api/real_data/feu", data=datajson)
+    print("Reponse de l'api :" + r.text)
  
 # Main program logic follows:
 if __name__ == '__main__':
@@ -50,10 +57,14 @@ if __name__ == '__main__':
         while ser.isOpen() : 
             time.sleep(1)
             if (ser.inWaiting() > 0): # if incoming bytes are waiting
-                datajson = readUARTMessage()
+                data = readUARTMessage() # read l'uart
+                print("Donnees recues du DataCollect : " + data)
+                try:
+                    sendPost(data) # requete post
+                except:
+                    print("Erreur d'insertion dans la base de donnée")  
                 
-                writeFile(datajson)
-                print(datajson) #ecriture dans la console, permet de vérifier la donnée reçu   
+                writeFile(data) #log
 
     except (KeyboardInterrupt, SystemExit):
         ser.close()
