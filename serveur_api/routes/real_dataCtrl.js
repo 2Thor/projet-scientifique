@@ -167,6 +167,35 @@ module.exports = {
         .catch(function(err){
             return res.status(501).json({ 'erreur listing casernes' : err });
         })
+    },
+
+    reset_vehicule: function(req, res){
+
+            //Params
+            idCaserne = req.body.caserne,
+            idVehicule = req.body.vehicule
+
+            var newCaserne = models.Real_data.models.Caserne.findOne({
+                where: {
+                    id: idCaserne
+                }
+            })
+            .then(function(newCaserne){
+                models.Real_data.models.Vehicule.update({ x: newCaserne.x, y: newCaserne.y },
+                    { where: {
+                        id: idVehicule
+                    }
+                })
+                .then(function(){
+                    return res.status(201).send("Reset effectué")
+                })
+                .catch(function(err){
+                    res.status(501).json({ 'erreur reset' : err });
+                })
+            })
+            .catch(function(err){
+                return res.status(501).json({ 'erreur caserne non existante' : err });
+            })
     }
 }
     
