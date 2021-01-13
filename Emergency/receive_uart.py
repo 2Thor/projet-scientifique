@@ -1,4 +1,5 @@
-import serial, time
+import serial, time, json
+import requests as rq
 
 #Ce script python lit les donnees recues sur ttyACM0 puis les ecrit dans un fichier
 #To do : Envoyer les donnees sur l'API Rest
@@ -40,6 +41,11 @@ def readUARTMessage():
 def writeFile(data_str):
     f= open(FILENAME,"a") #ouverture du fichier
     f.write(data_str) #ecriture dans le fichier
+
+# requete post
+def sendPost(data_json):
+    r = rq.post("http://127.0.0.1:8080/api/feu", data=data_json)
+    print(r.text)
  
 # Main program logic follows:
 if __name__ == '__main__':
@@ -50,10 +56,14 @@ if __name__ == '__main__':
         while ser.isOpen() : 
             time.sleep(1)
             if (ser.inWaiting() > 0): # if incoming bytes are waiting
-                datajson = readUARTMessage()
+                data = readUARTMessage() # read l'uart
+                print(data)
+                datajson = json.loads(data) 
+                #sendPost(datajson) # requete post
+                r = rq.post("http://127.0.0.1:8080/api/feu", data=datajson)
+                print(r.text)
                 
-                writeFile(datajson)
-                print(datajson) #ecriture dans la console, permet de vérifier la donnée reçu   
+                writeFile(data) 
 
     except (KeyboardInterrupt, SystemExit):
         ser.close()
