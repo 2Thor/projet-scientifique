@@ -46,7 +46,7 @@ def writeFile(data_str):
 def sendPost(data_json):
     datajson = json.loads(data_json) #string to dict
     r = rq.post("http://127.0.0.1:8080/api/real_data/feu", data=datajson)
-    print(r.text)
+    print("Reponse de l'api :" + r.text)
  
 # Main program logic follows:
 if __name__ == '__main__':
@@ -58,11 +58,11 @@ if __name__ == '__main__':
             time.sleep(1)
             if (ser.inWaiting() > 0): # if incoming bytes are waiting
                 data = readUARTMessage() # read l'uart
-                print(data)
+                print("Donnees recues du DataCollect : " + data)
                 try:
                     sendPost(data) # requete post
                 except:
-                    print("erreur d'insertion dans la base de donnée")  
+                    print("Erreur d'insertion dans la base de donnée")  
                 
                 writeFile(data) #log
 
