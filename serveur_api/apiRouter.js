@@ -19,6 +19,7 @@ exports.router = (function() {
     apiRouter.route('/real_data/get_vehicule').get(real_dataCtrl.get_vehicule);
     apiRouter.route('/real_data/vehicule_dispo').get(real_dataCtrl.vehicule_dispo);
     apiRouter.route('/real_data/vehicule_non_dispo').get(real_dataCtrl.vehicule_non_dispo);
+    apiRouter.route('/real_data/get_caserne').get(real_dataCtrl.get_caserne);
 
     //Routes simulate_data
     apiRouter.route('/simul_data/feu').post(simulate_dataCtrl.create_feu);

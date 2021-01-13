@@ -157,6 +157,10 @@ module.exports = {
                 return res.status(501).send("Erreur : vehicule non existant")
             }
         })
+    },
+
+    get_caserne: function(req, res){
+
     }
 }
     
