@@ -43,9 +43,9 @@ module.exports = {
     get_feu: function(req, res) {
     
         var id = req.params.id;
-        var test = models.Simulate_data.models.Feu_simule.findAll()
-        .then(function(test){
-            return res.status(201).send(test[0])
+        var allFeu = models.Simulate_data.models.Feu_simule.findAll()
+        .then(function(allFeu){
+            return res.status(201).send(allFeu)
         })
         .catch(function(err){
             return res.status(501).send("erreur lors du listing des feux")
