@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="refresh" content="20">
 
     <!-- Leaflet  CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
@@ -23,8 +24,10 @@
     <style>#map_id { height: 100vh; width: 100vw; }</style>
 
     <!-- Map description -->
-   <script>/*Create the map*/
-    var mymap = L.map('map_id').setView([45.7670562,4.8705643], 14);
+   <script>
+
+   /*Create the map*/
+    var mymap = L.map('map_id').setView([45.7670562,4.8705643], 13);
     
     class fire {
         constructor(location, intensity) {
@@ -39,27 +42,82 @@
         }
     }
 
-    var json = "{\"x\": 45.75231328094806, \"y\": 4.8564025543870155, \"i\": 50}"
+    var truck_ico = L.icon({
+        iconUrl: 'https://cdn.pixabay.com/photo/2012/04/24/23/21/firetruck-41088__340.png',
+        iconSize:     [30, 50], // size of the icon
+        iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+        popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+    });
+
+    var fire_station_ico = L.icon({
+        iconUrl: 'https://cdn.pixabay.com/photo/2014/04/02/17/05/fire-station-307895__340.png',
+        iconSize:     [90, 90], // size of the icon
+        iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+        popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+    });
 
     var fires = [];
     var trucks = [];
+    var fire_station = [];
+    var jsonData;
+    
+    //Initialize fire_station
+    fire_station[0] = new truck([45.766272, 4.8705803]);
+    fire_station[1] = new truck([45.776272, 4.8755803]);
+    fire_station[2] = new truck([45.756272, 4.8995803]);
 
     var dim_truck_X = 0.002;
     var dim_truck_Y = 0.001;
 
+    /*requete GET feu*/
+    var xhr = new XMLHttpRequest(); 
+    xhr.open('GET', 'http://localhost:8080/api/real_data/get_feu');
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+            jsonData = JSON.parse(xhr.responseText);
+            for (var i = 0; i < jsonData.length; i++) {
+                /*create fire*/
+                fires[i] = new fire([45.73 + jsonData[i].x/500,4.80 + jsonData[i].y/300],jsonData[i].intensite*20);
+                console.log(fires[i])
 
-    //Initialize fires
-    fires[0] = new fire([45.75231328094806, 4.8564025543870155], 50);
+                //show fire
+                var circle = L.circle(([fires[i].location[0], fires[i].location[1]]), {
+                    color: 'red',
+                    fillColor: '#f03',
+                    fillOpacity: 0.5,
+                    radius: fires[i].intensity
+                }).addTo(mymap)
 
-    for(var i = 1; i < 10; i++) {
-        fires[i] = new fire([Math.random() * (45.78 - 45.73) + 45.74, Math.random() * (4.94 - 4.80) + 4.80], Math.random()*100+50);
-    }
+                
+            }   
+        }
+    };
+    xhr.send();
+    /*requete GET camion*/
+    xhr = new XMLHttpRequest(); 
+    xhr.open('GET', 'http://localhost:8080/api/simul_data/get_feu');
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+            jsonData = JSON.parse(xhr.responseText);
+            for (var i = 0; i < jsonData.length; i++) {
+                /*create fire*/
+                fires[i] = new fire([45.73 + jsonData[i].x/500,4.80 + jsonData[i].y/300],jsonData[i].intensite*20);
+                console.log(fires[i])
 
-    //Initialize trucks
-    for(var i = 0; i < 10; i++) {
-        trucks[i] = new truck([Math.random() * (45.78 - 45.73) + 45.74, Math.random() * (4.94 - 4.80) + 4.80]);
-    }
-    
+                //show fire
+                var circle = L.circle(([fires[i].location[0], fires[i].location[1]]), {
+                    color: 'red',
+                    fillColor: '#f03',
+                    fillOpacity: 0.5,
+                    radius: fires[i].intensity
+                }).addTo(mymap)
+
+                
+            }   
+        }
+    };
+    xhr.send();     
+
     /*Add map tiles*/
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -70,43 +128,7 @@
         /*Account Mapbox*/
         accessToken: 'pk.eyJ1IjoibG9pY2JydW5vIiwiYSI6ImNramw3OG1mMzM5M3QydXNjeDJ1NXM1enAifQ.2edbMGFjSdeR75h8zAPfJw'
     }).addTo(mymap);
-    
-    /*Show fire*/
-    for (var i = 0; i < fires.length; i++) {
-        var circle = L.circle(([fires[i].location[0], fires[i].location[1]]), {
-            color: 'red',
-            fillColor: '#f03',
-            fillOpacity: 0.5,
-            radius: fires[i].intensity
-        }).addTo(mymap)
-    }
 
-    /*Show trucks*/
-    for (var i = 0; i < trucks.length; i++) {
-        var square = L.polygon([
-            [trucks[i].location[0], trucks[i].location[1]],
-            [trucks[i].location[0] + dim_truck_X, trucks[i].location[1]],
-            [trucks[i].location[0] + dim_truck_X, trucks[i].location[1] + dim_truck_Y],
-            [trucks[i].location[0], trucks[i].location[1] + dim_truck_Y]
-        ]).addTo(mymap);
-    }
-    setTimeout(myFunction, 3000);
-    function myFunction() {
-        removeLayer(mymap);
-        for(var i = 1; i < 10; i++) {
-            fires[i] = new fire([Math.random() * (45.78 - 45.73) + 45.74, Math.random() * (4.94 - 4.80) + 4.80], Math.random()*100+50);
-        }
-            
-            for (var i = 0; i < fires.length; i++) {
-            var circle = L.circle(([fires[i].location[0], fires[i].location[1]]), {
-                color: 'red',
-                fillColor: '#f03',
-                fillOpacity: 0.5,
-                radius: fires[i].intensity
-            }).addTo(mymap)
-        }
-        document.getElementById("test").innerHTML = "chgmt";
-    }
     </script>
 </body>
 </html>
