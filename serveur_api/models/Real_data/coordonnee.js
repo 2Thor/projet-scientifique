@@ -10,9 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      models.Coordonnee.hasMany(models.Caserne);
-      models.Coordonnee.hasMany(models.Feu_reel);
-      models.Coordonnee.hasMany(models.Vehicule);
+      // define association here
     }
   };
   Coordonnee.init({
