@@ -2,8 +2,8 @@ import serial, time, json
 import requests as rq
 
 #Ce script python lit les donnees recues sur ttyACM0 puis les ecrit dans un fichier
-#To do : Envoyer les donnees sur l'API Rest
-#To do : Verifier integrite des donnees
+#Fait : Envoyer les donnees sur l'API Rest
+#Fait : Verifier integrite des donnees
 #A lancer en sudo, a besoin de pyserial pour fonctionner (sudo pip install pyserial)
 
 FILENAME = "uart.log"
@@ -44,7 +44,8 @@ def writeFile(data_str):
 
 # requete post
 def sendPost(data_json):
-    r = rq.post("http://127.0.0.1:8080/api/feu", data=data_json)
+    datajson = json.loads(data_json) #string to dict
+    r = rq.post("http://127.0.0.1:8080/api/real_data/feu", data=datajson)
     print(r.text)
  
 # Main program logic follows:
@@ -58,12 +59,12 @@ if __name__ == '__main__':
             if (ser.inWaiting() > 0): # if incoming bytes are waiting
                 data = readUARTMessage() # read l'uart
                 print(data)
-                datajson = json.loads(data) 
-                #sendPost(datajson) # requete post
-                r = rq.post("http://127.0.0.1:8080/api/feu", data=datajson)
-                print(r.text)
+                try:
+                    sendPost(data) # requete post
+                except:
+                    print("erreur d'insertion dans la base de donnée")  
                 
-                writeFile(data) 
+                writeFile(data) #log
 
     except (KeyboardInterrupt, SystemExit):
         ser.close()
