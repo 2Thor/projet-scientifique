@@ -8,7 +8,6 @@ from flask import Flask, render_template #map on Web page
 
 HOST           = "0.0.0.0" #autorise tout le monde
 UDP_PORT       = 10000 #Port 10000
-MICRO_COMMANDS = ["TL" , "LT"]
 FILENAME        = "values.txt" #ecrire les valeurs reçu dans ce document
 LAST_VALUE      = "No Data" #si pas de data envoyer "no data"
 SERIALPORT = "/dev/ttyACM0"

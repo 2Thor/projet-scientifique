@@ -13,7 +13,6 @@ MQTT_ADDRESS = '1.1.1.1'
 MQTT_USER = 'mqtt'
 MQTT_PASSWORD = 'n0t3sy'
 MQTT_TOPIC = 'Emergency/test'
-MQTT_CLIENT_ID = 'MQTTInfluxDBBridge'
 
 influxdb_client = InfluxDBClient(INFLUXDB_ADDRESS, 8086, INFLUXDB_USER, INFLUXDB_PASSWORD, None)
 
@@ -30,25 +29,21 @@ def init_influxdb_database():
 
 def send_data_to_influxdb(fire_data):
     fire_data = json.loads(fire_data)
-    json_body = {
-        'id': fire_data["id"],
-        'location': fire_data["location"],
-        'intensity': fire_data["intensity"],
-        'date': fire_data["date"]
-    }
+    json_body = [{
+        "id": fire_data["id"],
+        "location": fire_data["location"],
+        "intensity": fire_data["intensity"]
+    }]
 
-    influxdb_client.write_points(json_body)
+    print(influxdb_client.write_points(json_body))
     
 def on_message(client, userdata, msg):
     #Callback when PUBLISH message is received from the server
-    print(msg.topic + ' ' + str(msg.payload))
-    fire_data = str(msg.payload)
-    fire_data = fire_data[2:]
-    fire_data = fire_data[:-1]
+    fire_data = str(msg.payload.decode("utf-8"))
 
     print('données:', fire_data)
 
-    fire_data = "{\"id\": 1, \"location\":[45.75231328094806, 4.8564025543870155], \"intensity\": 50, \"date\": 1113}"
+    #fire_data = "{\"id\": 1, \"location\":[45.75231328094806, 4.8564025543870155], \"intensity\": 50, \"date\": \"now\"}"
 
     if fire_data is not None:
         send_data_to_influxdb(fire_data)
@@ -57,7 +52,7 @@ def on_message(client, userdata, msg):
 def main():
     init_influxdb_database()
 
-    mqtt_client = mqtt.Client(MQTT_CLIENT_ID)
+    mqtt_client = mqtt.Client("mqtt")
     mqtt_client.username_pw_set(MQTT_USER, MQTT_PASSWORD)
     mqtt_client.on_connect = on_connect
     mqtt_client.on_message = on_message
