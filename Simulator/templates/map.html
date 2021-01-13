@@ -36,68 +36,17 @@
         }
     }
 
-    class truck {
-        constructor(location) {
-            this.location = location;
-        }
-    }
-
-    var truck_ico = L.icon({
-        iconUrl: 'https://cdn.pixabay.com/photo/2012/04/24/23/21/firetruck-41088__340.png',
-        iconSize:     [30, 50], // size of the icon
-        iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-        popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
-    });
-
-    var fire_station_ico = L.icon({
-        iconUrl: 'https://cdn.pixabay.com/photo/2014/04/02/17/05/fire-station-307895__340.png',
-        iconSize:     [90, 90], // size of the icon
-        iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-        popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
-    });
 
     var fires = [];
-    var trucks = [];
-    var fire_station = [];
     var jsonData;
-    
-    //Initialize fire_station
-    fire_station[0] = new truck([45.766272, 4.8705803]);
-    fire_station[1] = new truck([45.776272, 4.8755803]);
-    fire_station[2] = new truck([45.756272, 4.8995803]);
-
-    var dim_truck_X = 0.002;
-    var dim_truck_Y = 0.001;
 
     /*requete GET feu*/
     var xhr = new XMLHttpRequest(); 
-    xhr.open('GET', 'http://localhost:8080/api/real_data/get_feu');
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-            jsonData = JSON.parse(xhr.responseText);
-            for (var i = 0; i < jsonData.length; i++) {
-                /*create fire*/
-                fires[i] = new fire([45.73 + jsonData[i].x/500,4.80 + jsonData[i].y/300],jsonData[i].intensite*20);
-                console.log(fires[i])
-
-                //show fire
-                var circle = L.circle(([fires[i].location[0], fires[i].location[1]]), {
-                    color: 'red',
-                    fillColor: '#f03',
-                    fillOpacity: 0.5,
-                    radius: fires[i].intensity
-                }).addTo(mymap)
-
-                
-            }   
-        }
-    };
-    xhr.send();
-    /*requete GET camion*/
-    xhr = new XMLHttpRequest(); 
     xhr.open('GET', 'http://localhost:8080/api/simul_data/get_feu');
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
+            console.log("coucou")
+            console.log(xhr.responseText)
             jsonData = JSON.parse(xhr.responseText);
             for (var i = 0; i < jsonData.length; i++) {
                 /*create fire*/
@@ -111,12 +60,10 @@
                     fillOpacity: 0.5,
                     radius: fires[i].intensity
                 }).addTo(mymap)
-
-                
             }   
         }
     };
-    xhr.send();     
+    xhr.send(); 
 
     /*Add map tiles*/
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {

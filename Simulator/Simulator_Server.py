@@ -74,7 +74,9 @@ if __name__ == '__main__':
                 server_thread.start()
                 print("Server started at {} port {}".format(HOST, UDP_PORT))
                 while True :
-                        sendUARTMessage("(1,2,7)\n")
+                        #data = "(" + json['x'] + "," + "," + ")"
+                        sendUARTMessage(data)
+                        #sendUARTMessage("(1,2,7)\n")
                         time.sleep(5)
       
                                 
