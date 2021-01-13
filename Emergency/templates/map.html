@@ -25,20 +25,7 @@
 
     <!-- Map description -->
    <script>
-    /*requete GET*/
-    var xhr = new XMLHttpRequest(); 
-    xhr.open('GET', 'http://localhost:8080/api/real_data/get_feu');
-    xhr.onreadystatechange = function() {
-    if (xhr.readyState === 4) {
-        console.log(xhr.responseText)
-        var reponse = JSON.parse(xhr.responseText);
-        console.log(reponse)
-        alert(reponse);
-    }
-    };
-    xhr.send();
-   
-   
+
    /*Create the map*/
     var mymap = L.map('map_id').setView([45.7670562,4.8705643], 14);
     
@@ -54,6 +41,33 @@
             this.location = location;
         }
     }
+
+    var fires = [];
+    var trucks = [];
+
+    var dim_truck_X = 0.002;
+    var dim_truck_Y = 0.001;
+
+    /*requete GET*/
+    var xhr = new XMLHttpRequest(); 
+    xhr.open('GET', 'http://localhost:8080/api/real_data/get_feu');
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+            console.log(xhr.responseText)
+            var jsonData = JSON.parse(xhr.responseText);
+            console.log(jsonData)
+            for (var i = 0; i < jsonData.length; i++) {
+                console.log(jsonData[i]);
+                console.log(jsonData[i].x);
+                /*create fire*/
+                fires[i] = new fire([jsonData[i].x,jsonData[i].y],jsonData[i].intensite);
+            
+
+            }   
+        }
+    };
+    xhr.send();    
+
 
     function aff(fires, trucks) {
         /*Show fire*/
@@ -77,13 +91,9 @@
         }
     }
 
-    var fires = [];
-    var trucks = [];
 
-    var dim_truck_X = 0.002;
-    var dim_truck_Y = 0.001;
 
-    //Initialize fires
+    /*Initialize fires
     fires[0] = new fire([45.75231328094806, 4.8564025543870155], 50);
 
     for(var i = 1; i < 10; i++) {
@@ -95,7 +105,7 @@
         trucks[i] = new truck([Math.random() * (45.78 - 45.73) + 45.74, Math.random() * (4.94 - 4.80) + 4.80]);
     }
 
-    var json = "{\"x\": 45.75231328094806, \"y\": 4.8564025543870155, \"i\": 50}"
+    var json = "{\"x\": 45.75231328094806, \"y\": 4.8564025543870155, \"i\": 50}"*/
     
     /*Add map tiles*/
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
