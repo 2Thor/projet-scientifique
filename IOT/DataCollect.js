@@ -28,11 +28,11 @@ function formJson(str: string[]): string{
     str[1]=str[1].replace("(", "")
     str[1]=str[1].replace(")", "")
     let data = splitData(str[1], ",")
-    let sentJson = "{ "
-    sentJson += "'x': " + "\'" + data[0] + "\'" + ","
-    sentJson += "'y': " + "\'" + data[1] + "\'" + ","
-    sentJson += "'i': " + "\'" + data[2] + "\'"
-    sentJson += " }"
+    let sentJson = "{"
+    sentJson += "\"x\": " + data[0] + ","
+    sentJson += " \"y\": " + data[1] + ","
+    sentJson += " \"i\": " + data[2]
+    sentJson += "}"
     return sentJson
 
 }
