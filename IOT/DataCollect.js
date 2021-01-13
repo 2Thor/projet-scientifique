@@ -25,8 +25,8 @@ radio.onReceivedString(function (receivedString: string) {
 //Convertion en Json
 function formJson(str: string[]): string{
 
-    str[1].replace("(", null)
-    str[1].replace(")", null)
+    str[1]=str[1].replace("(", "")
+    str[1]=str[1].replace(")", "")
     let data = splitData(str[1], ",")
     let sentJson = "{ "
     sentJson += "'x': " + "\'" + data[0] + "\'" + ","
