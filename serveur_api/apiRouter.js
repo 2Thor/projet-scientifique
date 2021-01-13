@@ -13,7 +13,6 @@ exports.router = (function() {
     //apiRouter.route('/users/login/').post(usersCtrl.login);
 
     //Routes real_data
-
     apiRouter.route('/real_data/create_feu').post(real_dataCtrl.create_feu);
     apiRouter.route('/real_data/get_feu/').get(real_dataCtrl.get_feu);
     apiRouter.route('/real_data/affectation_vehicule').post(real_dataCtrl.affectation_vehicule);
