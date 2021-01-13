@@ -27,15 +27,13 @@
    <script>
     /*requete GET*/
     var xhr = new XMLHttpRequest(); 
-    xhr.open('GET', 'https://jsonplaceholder.typicode.com/users/1');
+    xhr.open('GET', 'http://localhost:8080/api/real_data/get_feu');
     xhr.onreadystatechange = function() {
     if (xhr.readyState === 4) {
+        console.log(xhr.responseText)
         var reponse = JSON.parse(xhr.responseText);
-        alert(reponse.name);
-        for (var i = 0; i < reponse.counters.length; i++) {
-        var counter = reponse.counters[i];
-        console.log(counter.counter_name);
-}
+        console.log(reponse)
+        alert(reponse);
     }
     };
     xhr.send();
