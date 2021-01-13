@@ -4,19 +4,18 @@ module.exports = {
     create_feu: function(req, res) {
 
 
-        console.log(models)
        //Params
         var x = req.body.x;
         var y = req.body.y;
         var i = req.body.i;
         
-        var newCoord = models.Simulate_data.models.Coordonnee.create({
+        var newCoord = models.Real_data.models.Coordonnee.create({
             latitude: x,
             longitude: y,
         })
 
         .then(function(newCoord){
-            var newFeu_reel = models.Simulate_data.models.Feu_simule.create({
+            var newFeu_reel = models.Real_data.models.Feu_reel.create({
                 intensite: i,
                 idCoordonnee: newCoord.id
             })
