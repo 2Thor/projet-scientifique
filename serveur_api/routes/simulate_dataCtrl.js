@@ -4,7 +4,6 @@ module.exports = {
     create_feu: function(req, res) {
 
 
-        console.log(models)
        //Params
         var x = req.body.x;
         var y = req.body.y;
