@@ -60,8 +60,103 @@ module.exports = {
         .then(function(newFeu_reel){
             return res.status(201).send(newFeu_reel)
         })
+        .catch(function(err){
+            return res.status(500).json({ 'Erreur recherche feu' : err });
+        });
 
 
-},
+    },
+
+    vehicule_dispo: function(req,res){
+
+        var vehicule_disponible = models.Real_data.models.Vehicule.findAll({
+            where: {
+                idFeu : {
+                    [Op.eq]: 0,
+                }
+                
+            }
+        })
+        .then(function(vehicule_disponible){
+
+        })
+        .catch(function(err){
+            return res.status(500).json({ 'erreur vehicules disponibles' : err });
+        });
+
+    },
+
+    vehicule_non_dispo: function(req,res){
+
+        var vehicule_disponible = models.Real_data.models.Vehicule.findAll({
+            where: {
+                idFeu : {
+                    [Op.ne]: 0,
+                }
+                
+            }
+        })
+        .then(function(vehicule_disponible){
+            return res.status(501).send(vehicule_disponible)
+        })
+        .catch(function(err){
+            return res.status(501).json({ 'erreur vehicules disponibles' : err });
+        });
+        
+    },
+
+    get_vehicule: function(req,res){
+        
+        var allVehicule = models.Real_data.models.Vehicule.findAll()
+        .then(function(vehicule_disponible){
+            return res.status(201).send(allVehicule)
+        })
+        .catch(function(err){
+            return res.status(501).json({ 'erreur listing vehicule' : err });
+        })
+    },
+
+    affectation_vehicule: function(req,res){
+
+        //Params
+        idFeu = req.body.feu,
+        idVehicule = req.body.vehicule
+
+        var testVehicule = models.Real_data.models.Vehicule.findOne({
+            where: {
+                id: idVehicule,  
+            }
+        })
+        .then(function(testVehicule){
+            if(testVehicule){
+                var testFeu = models.Real_data.models.Feu_reel.findOne({
+                    where: {
+                        id: idFeu,  
+                    }
+                })
+                .then(function(testFeu){
+                    if(testFeu){
+                        models.Real_data.models.Vehicule.update({ idFeu : idFeu, x: testFeu.x, y: testFeu.y },
+                            { where: {
+                                id: idVehicule
+                            }
+                        })
+                        .then(function(){
+                            return res.status(201).send("L'affectation à bien été effectué")
+                        })
+                        .catch(function(err){
+                            return res.status(501).json({ 'erreur lors de l\'insertion de l\'affectation' : err });
+                        })
+                    }
+                    else{
+                        return res.status(501).send("Erreur : feu non existant")
+                    }
+                })
+            }
+            else{
+                return res.status(501).send("Erreur : vehicule non existant")
+            }
+        })
+    }
 }
     

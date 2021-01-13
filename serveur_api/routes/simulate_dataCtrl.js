@@ -24,7 +24,7 @@ module.exports = {
               });
     },
 
-    get_feu: function(req, res) {
+    get_solo_feu: function(req, res) {
     
         var id = req.params.id;
         var test = models.Simulate_data.models.Feu_simule.findAll({
@@ -34,6 +34,21 @@ module.exports = {
           })
         .then(function(test){
             return res.status(201).send(test[0])
+        })
+        .catch(function(err){
+            return res.status(501).send("erreur lors de la recherche du feu")
+        })
+    },
+
+    get_feu: function(req, res) {
+    
+        var id = req.params.id;
+        var test = models.Simulate_data.models.Feu_simule.findAll()
+        .then(function(test){
+            return res.status(201).send(test[0])
+        })
+        .catch(function(err){
+            return res.status(501).send("erreur lors du listing des feux")
         })
     },
 }
