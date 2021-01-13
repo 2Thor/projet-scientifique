@@ -16,7 +16,8 @@ module.exports = (sequelize, DataTypes) => {
   Caserne.init({
     nom: DataTypes.STRING,
     max_camion: DataTypes.INTEGER,
-    idCoordonnee: DataTypes.INTEGER
+    x: DataTypes.INTEGER,
+    y: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Caserne',

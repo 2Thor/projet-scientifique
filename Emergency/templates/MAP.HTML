@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="refresh" content="10">
-
     <!-- Leaflet  CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
     integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
@@ -24,7 +23,24 @@
     <style>#map_id { height: 100vh; width: 100vw; }</style>
 
     <!-- Map description -->
-   <script>/*Create the map*/
+   <script>
+    /*requete GET*/
+    var xhr = new XMLHttpRequest(); 
+    xhr.open('GET', 'https://jsonplaceholder.typicode.com/users/1');
+    xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4) {
+        var reponse = JSON.parse(xhr.responseText);
+        alert(reponse.name);
+        for (var i = 0; i < reponse.counters.length; i++) {
+        var counter = reponse.counters[i];
+        console.log(counter.counter_name);
+}
+    }
+    };
+    xhr.send();
+   
+   
+   /*Create the map*/
     var mymap = L.map('map_id').setView([45.7670562,4.8705643], 14);
     
     class fire {

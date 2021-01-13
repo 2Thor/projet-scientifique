@@ -32,9 +32,8 @@ SEQUELIZE DATABABSE
 
 
 sequelize model:create --attributes "latitude:integer longitude:integer" --name Coordonnee
-sequelize model:create --attributes "nom:string max_camion:integer idCoordonnee:integer" --name Caserne
-sequelize model:create --attributes "intensite:integer idCoordonnee:integer" --name Feu_simule
-sequelize model:create --attributes "intensite:integer idCoordonnee:integer" --name Feu_reel
+sequelize model:create --attributes "nom:string max_camion:integer x:integer y:integer" --name Caserne
+sequelize model:create --attributes "intensite:integer x:integer y:integer" --name Feu_simule
+sequelize model:create --attributes "intensite:integer x:integer y:integer" --name Feu_reel
 sequelize model:create --attributes "nom:string vitesse:integer efficacite:integer" --name Type_vehicule
-sequelize model:create --attributes "idType:integer idFeu:integer idCaserne:integer idCoordonnee:integer" --name Vehicule
-( sequelize model:create --attributes "idCoord:allowNull:autoIncrement:primaryKey:INTEGER latitude:integer longitude:integer" --name CoordonneeTest ) 
+sequelize model:create --attributes "x:integer y:integer idType:integer idFeu:integer idCaserne:integer" --name Vehicule
