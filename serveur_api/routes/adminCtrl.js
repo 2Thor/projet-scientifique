@@ -10,7 +10,7 @@ module.exports = {
         var max = req.body.max
         
         var newCasere = models.Real_data.models.Caserne.create({
-            name: nom,
+            nom: name,
             x: x,
             y: y,
             max_camion: max
