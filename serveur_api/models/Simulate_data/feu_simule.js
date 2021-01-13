@@ -15,7 +15,8 @@ module.exports = (sequelize, DataTypes) => {
   };
   Feu_simule.init({
     intensite: DataTypes.INTEGER,
-    idCoordonnee: DataTypes.INTEGER
+    x: DataTypes.INTEGER,
+    y: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Feu_simule',
