@@ -78,7 +78,7 @@ module.exports = {
             }
         })
         .then(function(vehicule_disponible){
-
+            return res.status(501).send(vehicule_disponible)
         })
         .catch(function(err){
             return res.status(500).json({ 'erreur vehicules disponibles' : err });
@@ -108,7 +108,7 @@ module.exports = {
     get_vehicule: function(req,res){
         
         var allVehicule = models.Real_data.models.Vehicule.findAll()
-        .then(function(vehicule_disponible){
+        .then(function(allVehicule){
             return res.status(201).send(allVehicule)
         })
         .catch(function(err){
@@ -160,7 +160,13 @@ module.exports = {
     },
 
     get_caserne: function(req, res){
-
+        var allCaserne = models.Real_data.models.Caserne.findAll()
+        .then(function(allCaserne){
+            return res.status(201).send(allCaserne)
+        })
+        .catch(function(err){
+            return res.status(501).json({ 'erreur listing casernes' : err });
+        })
     }
 }
     
