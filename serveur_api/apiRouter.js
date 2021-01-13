@@ -16,6 +16,7 @@ exports.router = (function() {
 
     //Routes real_data
     apiRouter.route('/simul_data/feu').post(simulate_dataCtrl.create_feu);
+    apiRouter.route('/simul_data/get_feu/:id').get(simulate_dataCtrl.get_feu);
 
     return apiRouter;
 })();
