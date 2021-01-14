@@ -3,6 +3,7 @@ import socketserver
 import threading
 import serial
 import json
+import requests as rq
 
 
 
@@ -25,6 +26,8 @@ class ThreadedUDPRequestHandler(socketserver.BaseRequestHandler):
         print("{}: client: {}, wrote: {}".format(current_thread.name, self.client_address, data))
         if data != "": #si on recoit une donnée
                 print("msg recu ",data)
+                sendGetUart(data)
+
 
 
 class ThreadedUDPServer(socketserver.ThreadingMixIn, socketserver.UDPServer):
@@ -53,8 +56,19 @@ def initUART():
                 exit()
 
 def sendUARTMessage(msg):
-    ser.write(msg.encode())
-    print("Message <" + msg + "> sent to micro-controller." )
+        ser.write(msg.encode())
+        print("Message <" + msg + "> sent to micro-controller." )
+
+# requete get et envoi serial
+def sendGetUart(id):
+        apilink="http://localhost:8080/api/simul_data/get_solo_feu/" + id
+        r = rq.get(apilink)
+        print("Reponse de l'api :" + r.text)
+        jsonparse = json.loads(r.text)
+        data = "(" + str(jsonparse["x"]) + "," + str(jsonparse["y"]) + "," + str(jsonparse["intensite"]) + ")"
+        print(data)
+        sendUARTMessage(data)
+
 
 
 
@@ -62,7 +76,6 @@ def sendUARTMessage(msg):
 # Main program logic follows:
 if __name__ == '__main__':
         print ('Press Ctrl-C to quit.')
-
         initUART()
 
         server = ThreadedUDPServer((HOST, UDP_PORT), ThreadedUDPRequestHandler)
@@ -73,13 +86,7 @@ if __name__ == '__main__':
         try:
                 server_thread.start()
                 print("Server started at {} port {}".format(HOST, UDP_PORT))
-                while True :
-                        data = "(" + json['x'] + "," + json['y'] + "," + json['i'] + ")"
-                        sendUARTMessage(data)
-                        #sendUARTMessage("(1,2,7)\n")
-                        time.sleep(5)
-      
-                                
+                                     
         except (KeyboardInterrupt, SystemExit):
                 server.shutdown()
                 server.server_close()
