@@ -20,7 +20,7 @@ module.exports = {
             })
         })
         .catch(function(err) {
-                return res.status(500).json({ 'Erreur insertion feu' : err });
+                return res.status(501).json({ 'Erreur insertion feu' : err });
               });
     },
 
