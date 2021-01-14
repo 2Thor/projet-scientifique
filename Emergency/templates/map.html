@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="refresh" content="20">
+    <meta http-equiv="refresh" content="10">
 
     <!-- Leaflet  CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
@@ -71,9 +71,10 @@
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
             jsonData = JSON.parse(xhr.responseText);
+            //console.log(jsonData)
             for (var i = 0; i < jsonData.length; i++) {
                 /*create fire*/
-                fires[i] = new fire([45.73 + jsonData[i].x/500,4.80 + jsonData[i].y/300], jsonData[i].intensite*20);
+                fires[i] = new fire([45.73 + jsonData[i].x/300,4.80 + jsonData[i].y/100], jsonData[i].intensite*20);
                 console.log(fires[i])
 
                 //show fire
@@ -93,10 +94,11 @@
     xhr2.onreadystatechange = function() {
         if (xhr2.readyState === 4) {
             jsonData = JSON.parse(xhr2.responseText);
+            //console.log(jsonData)
             for (var i = 0; i < jsonData.length; i++) {
                 /*create truck*/
-                trucks[i] = new truck([45.73 + jsonData[i].x/500,4.80 + jsonData[i].y/300]);
-
+                trucks[i] = new truck([45.73 + jsonData[i].x/300,4.80 + jsonData[i].y/100]);
+                console.log(trucks[i])
                 /*show truck*/
                 L.marker([trucks[i].location[0], trucks[i].location[1]], {icon: truck_ico}).addTo(mymap);
    
@@ -105,16 +107,18 @@
     };
     xhr2.send()
 
-    /*requete GET camion*/
+    /*requete GET caserne*/
     xhr3 = new XMLHttpRequest(); 
-    xhr3.open('GET', 'http://localhost:8080/api/real_data/get_vehicule');
+    xhr3.open('GET', 'http://localhost:8080/api/real_data/get_caserne');
     xhr3.onreadystatechange = function() {
         if (xhr3.readyState === 4) {
-            console.log(xhr3.readyState)
             jsonData = JSON.parse(xhr3.responseText);
+            console.log(jsonData)
             for (var i = 0; i < jsonData.length; i++) {
+
                 /*show truck*/
-                //L.marker([jsonData[i].[0], jsonData[i].[1]], {icon: fire_station_ico}).addTo(mymap);
+                L.marker([45.73 + jsonData[i].x/300,4.80 + jsonData[i].y/100], {icon: fire_station_ico}).addTo(mymap);
+                console.log([45.73 + jsonData[i].x/300,4.80 + jsonData[i].y/100])
             }   
         }
     };
