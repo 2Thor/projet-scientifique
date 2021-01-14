@@ -181,7 +181,7 @@ module.exports = {
                 }
             })
             .then(function(newCaserne){
-                models.Real_data.models.Vehicule.update({ x: newCaserne.x, y: newCaserne.y },
+                models.Real_data.models.Vehicule.update({ x: newCaserne.x, y: newCaserne.y, idFeu: 0 },
                     { where: {
                         id: idVehicule
                     }

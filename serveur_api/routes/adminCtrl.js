@@ -46,7 +46,9 @@ module.exports = {
                     if(testCaserne){
                         var newVehicule = models.Real_data.models.Vehicule.create({
                             idType : idType,
-                            idCaserne: idCaserne
+                            idCaserne: idCaserne,
+                            x: testCaserne.x,
+                            y: testCaserne.x
                         })
                         .then(function(newVehicule){
                             return res.status(501).json({
