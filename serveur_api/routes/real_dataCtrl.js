@@ -171,6 +171,8 @@ module.exports = {
 
     reset_vehicule: function(req, res){
 
+
+
             //Params
             idCaserne = req.body.caserne,
             idVehicule = req.body.vehicule
@@ -196,6 +198,19 @@ module.exports = {
             .catch(function(err){
                 return res.status(501).json({ 'erreur caserne non existante' : err });
             })
+    },
+
+    update_feu: function(req,res){
+
+        //Paramas
+        intensite = req.body.i,
+        idFeu = req.body.feu
+
+        models.Real_data.Feu_reel.update({ intensite: intensite},
+            { where: {
+                id: idFeu
+            }
+        })
     }
 }
     
