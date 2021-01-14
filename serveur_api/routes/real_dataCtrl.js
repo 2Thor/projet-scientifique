@@ -206,7 +206,7 @@ module.exports = {
         intensite = req.body.i,
         idFeu = req.body.feu
 
-        models.Real_data.Feu_reel.update({ intensite: intensite},
+        models.Real_data.models.Feu_reel.update({ intensite: intensite},
             { where: {
                 id: idFeu
             }
