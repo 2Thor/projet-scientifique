@@ -78,10 +78,10 @@ module.exports = {
             }
         })
         .then(function(vehicule_disponible){
-            return res.status(501).send(vehicule_disponible)
+            return res.status(201).send(vehicule_disponible)
         })
         .catch(function(err){
-            return res.status(500).json({ 'erreur vehicules disponibles' : err });
+            return res.status(501).json({ 'erreur vehicules disponibles' : err });
         });
 
     },
@@ -97,7 +97,7 @@ module.exports = {
             }
         })
         .then(function(vehicule_disponible){
-            return res.status(201).send(vehicule_disponible)
+            return res.status().send(vehicule_disponible)
         })
         .catch(function(err){
             return res.status(501).json({ 'erreur vehicules disponibles' : err });
