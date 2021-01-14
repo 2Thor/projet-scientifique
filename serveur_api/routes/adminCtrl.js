@@ -48,7 +48,8 @@ module.exports = {
                             idType : idType,
                             idCaserne: idCaserne,
                             x: testCaserne.x,
-                            y: testCaserne.x
+                            y: testCaserne.x,
+                            idFeu: 0
                         })
                         .then(function(newVehicule){
                             return res.status(501).json({
