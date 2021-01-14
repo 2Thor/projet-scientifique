@@ -7,7 +7,7 @@ module.exports = {
        //Params
         var x = req.body.x;
         var y = req.body.y;
-        var i = req.body.i;
+        var i = req.body.intensite;
   
         var newFeu_simule = models.Simulate_data.models.Feu_simule.create({
             intensite: i,
@@ -20,7 +20,7 @@ module.exports = {
             })
         })
         .catch(function(err) {
-                return res.status(500).json({ 'Erreur insertion feu' : err });
+                return res.status(501).json({ 'Erreur insertion feu' : err });
               });
     },
 
