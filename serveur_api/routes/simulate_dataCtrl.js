@@ -16,7 +16,7 @@ module.exports = {
         })
         .then(function(newFeu_simule){
             return res.status(201).json({
-                'IdFeu_reel': newFeu_simule.id
+                'id': newFeu_simule.id
             })
         })
         .catch(function(err) {
